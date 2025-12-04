@@ -10,7 +10,7 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   private getOptions() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('auth_token');
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Token ${token}`);
       return { headers };

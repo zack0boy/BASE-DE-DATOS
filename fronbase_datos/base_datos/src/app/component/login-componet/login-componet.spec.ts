@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CarreraPage } from './carrera-page';
+import { LoginComponet } from './login-componet';
 
-describe('CarreraPage', () => {
-  let component: CarreraPage;
-  let fixture: ComponentFixture<CarreraPage>;
+describe('LoginComponet', () => {
+  let component: LoginComponet;
+  let fixture: ComponentFixture<LoginComponet>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CarreraPage]
+      imports: [LoginComponet]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CarreraPage);
+    fixture = TestBed.createComponent(LoginComponet);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
