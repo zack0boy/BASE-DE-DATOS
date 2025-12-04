@@ -39,9 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'api',
+    'corsheaders',
+
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 ROOT_URLCONF = 'ucmvirtualbackend.urls'
 
@@ -77,9 +82,9 @@ WSGI_APPLICATION = 'ucmvirtualbackend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.oracle',
-        'NAME': 'free',  # Puede ser el SID o el nombre del servicio
+        'NAME': 'xe',  # Puede ser el SID o el nombre del servicio
         'USER': 'system',
-        'PASSWORD': 'ORACLE123',
+        'PASSWORD': 'admin123',
         'HOST': 'localhost',      
         'PORT': '1521',
                      
