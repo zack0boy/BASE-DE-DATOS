@@ -1,3 +1,8 @@
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
 .login-form {
   max-width: 400px;
   margin: 2rem auto;

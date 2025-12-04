@@ -1,6 +1,8 @@
 <div class="login-form">
+  <img id="logoimage" src="//lms.ucm.cl/pluginfile.php/1/theme_moove/logo/1764776665/UCM%20Virtual-01%20SIN%20FONDO.png" class="img-fluid" alt="UCM Virtual"/>
+
   <h2>Iniciar Sesión</h2>
-  
+
   <form (ngSubmit)="onLogin(loginForm)" #loginForm="ngForm">
     <div *ngIf="error" class="error-message">
       {{ error }}
@@ -29,8 +31,8 @@
     </div>
 
     <button type="submit" class="login-button" [disabled]="isLoading">
-      <span *ngIf="!isLoading">Iniciar Sesión</span>
-      <span *ngIf="isLoading">Iniciando sesión...</span>
+      <span *ngIf="!isLoading">acceder</span>
+      <span *ngIf="isLoading">accediendo ...</span>
     </button>
   </form>
 </div>
