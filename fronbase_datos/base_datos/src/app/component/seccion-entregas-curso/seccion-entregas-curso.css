@@ -1,0 +1,192 @@
+.entregas-container {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
+  font-size: 16px;
+}
+
+.entregas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.entrega-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.3s ease;
+  border-left: 4px solid #7b1fa2;
+}
+
+.entrega-card:hover {
+  box-shadow: 0 4px 12px rgba(123, 31, 162, 0.1);
+}
+
+.entrega-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.entrega-info h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #1a1a1a;
+}
+
+.entrega-meta {
+  font-size: 12px;
+  color: #999;
+  margin: 0;
+}
+
+.entrega-estado {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.estado-entregada {
+  background-color: #e8f5e9;
+  color: #388e3c;
+}
+
+.estado-pendiente {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.estado-vencida {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.estado-calificada {
+  background-color: #e3f2fd;
+  color: #0084d4;
+}
+
+.entrega-descripcion {
+  font-size: 14px;
+  color: #555;
+  margin: 12px 0;
+  line-height: 1.5;
+}
+
+.entrega-info-extra {
+  display: flex;
+  gap: 16px;
+  margin: 12px 0;
+  font-size: 13px;
+  color: #666;
+}
+
+.archivo,
+.calificacion {
+  padding: 8px 0;
+}
+
+.comentarios {
+  background-color: #f5f5f5;
+  border-left: 3px solid #7b1fa2;
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.comentarios strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #1a1a1a;
+}
+
+.comentarios p {
+  margin: 0;
+  color: #555;
+}
+
+.entrega-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn-descargar,
+.btn-reenviar {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-descargar {
+  background-color: #7b1fa2;
+  color: white;
+}
+
+.btn-descargar:hover {
+  background-color: #5d0f7f;
+}
+
+.btn-reenviar {
+  background-color: white;
+  color: #7b1fa2;
+  border: 1px solid #7b1fa2;
+}
+
+.btn-reenviar:hover {
+  background-color: #f3e5f5;
+}
+
+@media (max-width: 768px) {
+  .entregas-container {
+    padding: 16px;
+  }
+
+  .entrega-header {
+    flex-direction: column;
+  }
+
+  .entrega-estado {
+    align-self: flex-start;
+  }
+
+  .entrega-info-extra {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .entrega-actions {
+    flex-direction: column;
+  }
+
+  .btn-descargar,
+  .btn-reenviar {
+    width: 100%;
+  }
+}

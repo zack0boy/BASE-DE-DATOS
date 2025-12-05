@@ -1,0 +1,90 @@
+.recursos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.recursos-titulo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: #333;
+}
+
+.recursos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.recursos-empty {
+  text-align: center;
+  padding: 2rem;
+  background: #f5f5f5;
+  border-radius: 0.5rem;
+  color: #999;
+}
+
+.recurso-item {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.recurso-item:hover {
+  border-color: #667eea;
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.1);
+}
+
+.recurso-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.recurso-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.recurso-contenido {
+  flex: 1;
+}
+
+.recurso-titulo {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.recurso-descripcion {
+  margin: 0 0 1rem 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #666;
+}
+
+.recurso-link {
+  display: inline-block;
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.recurso-link:hover {
+  color: #764ba2;
+}

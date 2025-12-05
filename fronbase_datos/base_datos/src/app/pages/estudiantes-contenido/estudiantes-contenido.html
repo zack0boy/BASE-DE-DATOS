@@ -1,0 +1,92 @@
+<app-header></app-header>
+
+<main class="contenido-page">
+  <!-- Loading State -->
+  <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+
+  <!-- Error State -->
+  <app-error-message
+    *ngIf="error && !loading"
+    [message]="error"
+    [showReload]="true"
+    (onReload)="reloadData()"
+  ></app-error-message>
+
+  <!-- Content -->
+  <div *ngIf="!loading && !error && courseData">
+    <!-- Header with Course Info -->
+    <app-header-asignatura
+      [nombre]="courseData.title || courseData.nombre || ''"
+      [codigo]="courseData.codigo || courseData.id || ''"
+      [seccion]="courseData.section || courseData.seccion || ''"
+      [aula]="courseData.aula || courseData.location || ''"
+      [creditos]="(courseData.creditos || '') + ''"
+      [showBackButton]="true">
+    </app-header-asignatura>
+
+    <!-- Tabs Navigation -->
+    <div class="container-ancho">
+      <app-tabs-navegacion
+        [tabs]="tabs"
+        [activeTabId]="activeTab"
+        (tabSelected)="onTabChange($event)">
+      </app-tabs-navegacion>
+    </div>
+
+    <!-- Tab Content Container -->
+    <div class="container-ancho mt-4">
+      <!-- Presentación Tab -->
+      <div *ngIf="activeTab === 'presentacion'">
+        <app-seccion-presentacion
+          [titulo]="courseData.title || courseData.nombre || ''"
+          [descripcion]="courseData.description || courseData.descripcion || 'Sin descripción disponible'"
+          [imagenBg]="'https://via.placeholder.com/1200x400'">
+        </app-seccion-presentacion>
+
+        <!-- Docentes Section (only in Presentación) -->
+        <div class="mt-8">
+          <app-seccion-docentes-curso
+            [docentes]="docentes">
+          </app-seccion-docentes-curso>
+        </div>
+      </div>
+
+      <!-- Contenidos Tab -->
+      <app-seccion-contenidos-curso
+        *ngIf="activeTab === 'contenidos'"
+        [contenidos]="contenidos">
+      </app-seccion-contenidos-curso>
+
+      <!-- Actividades Tab -->
+      <app-seccion-actividades-curso
+        *ngIf="activeTab === 'actividades'"
+        [actividades]="actividades">
+      </app-seccion-actividades-curso>
+
+      <!-- Evaluaciones Tab -->
+      <app-seccion-evaluaciones-curso
+        *ngIf="activeTab === 'evaluaciones'"
+        [evaluaciones]="evaluaciones">
+      </app-seccion-evaluaciones-curso>
+
+      <!-- Entregas Tab -->
+      <app-seccion-entregas-curso
+        *ngIf="activeTab === 'entregas'"
+        [entregas]="entregas">
+      </app-seccion-entregas-curso>
+
+      <!-- Avisos Tab -->
+      <app-seccion-avisos
+        *ngIf="activeTab === 'avisos'"
+        [avisos]="anuncios">
+      </app-seccion-avisos>
+
+      <!-- Notas Tab -->
+      <app-seccion-notas-curso
+        *ngIf="activeTab === 'notas'">
+      </app-seccion-notas-curso>
+    </div>
+  </div>
+</main>
+
+<app-footer></app-footer>

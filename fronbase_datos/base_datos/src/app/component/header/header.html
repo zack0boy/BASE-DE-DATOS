@@ -1,6 +1,57 @@
 <header class="header">
-  <img id="logoimage" src="//lms.ucm.cl/pluginfile.php/1/theme_moove/logo/1764776665/UCM%20Virtual-01%20SIN%20FONDO.png" class="img-fluid" alt="UCM Virtual"/>
-  <a href="#" (click)="onLogout($event)">
-    <button>Salir</button>
-  </a>
+  <img
+    id="logoimage"
+    src="//lms.ucm.cl/pluginfile.php/1/theme_moove/logo/1764776665/UCM%20Virtual-01%20SIN%20FONDO.png"
+    class="img-fluid"
+    alt="UCM Virtual"
+  />
+
+  <div class="header-actions">
+    <!-- Buzón de mensajes -->
+    <div class="message-button-group">
+      <button
+        class="btn-message"
+        [class.has-unread]="unreadCount > 0"
+        (click)="openMensajesRecibidos()"
+        title="Ver mensajes recibidos"
+      >
+        <span class="icon">📬</span>
+        <span *ngIf="unreadCount > 0" class="badge">{{ unreadCount }}</span>
+      </button>
+    </div>
+
+    <!-- Botón enviar mensaje (solo docentes) -->
+    <button
+      *ngIf="isDocente"
+      class="btn-send-message"
+      (click)="openMensajeModal()"
+      title="Enviar un mensaje"
+    >
+      <span class="icon">✉️</span>
+      <span class="text">Mensaje</span>
+    </button>
+
+    <!-- Cerrar sesión -->
+    <a href="#" (click)="onLogout($event)">
+      <button class="btn-logout">
+        <span class="icon">🚪</span>
+        <span class="text">Cerrar Sesión</span>
+      </button>
+    </a>
+  </div>
+
+  <!-- Modales -->
+  <app-mensaje-modal
+    [isOpen]="showMensajeModal"
+    [senderId]="currentUser?.id || ''"
+    [recipientId]="''"
+    [recipientName]="'Docente'"
+    (close)="closeMensajeModal()"
+  ></app-mensaje-modal>
+
+  <app-mensajes-recibidos-modal
+    [isOpen]="showMensajesRecibidosModal"
+    [usuarioId]="currentUser?.id || ''"
+    (close)="closeMensajesRecibidos()"
+  ></app-mensajes-recibidos-modal>
 </header>

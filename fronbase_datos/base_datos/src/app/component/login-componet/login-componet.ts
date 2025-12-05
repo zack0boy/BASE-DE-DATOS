@@ -24,7 +24,7 @@ export class LoginComponet implements OnInit {
 
   ngOnInit() {
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/estudiantes-inicio']);
+      this.redirectByRole();
     }
   }
 
@@ -46,11 +46,10 @@ export class LoginComponet implements OnInit {
         console.log('Is user logged in after login?', this.authService.isLoggedIn());
         console.log('Auth token:', localStorage.getItem('auth_token'));
 
-        this.router.navigate(['/estudiantes-inicio']).then(success => {
+        this.redirectByRole().then(success => {
           console.log('Navigation success:', success);
           if (!success) {
             console.error('Navigation failed, current URL:', window.location.href);
-            // Try a full page reload as a fallback
             window.location.href = '/estudiantes-inicio';
           }
         }).catch(err => {
@@ -70,5 +69,18 @@ export class LoginComponet implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  private redirectByRole() {
+    const currentUser = this.authService.getCurrentUser();
+    const userRole = currentUser?.role || null;
+    const isDocente = userRole === 42;
+    const isAdmin = userRole === 1;
+
+    if (isDocente || isAdmin) {
+      return this.router.navigate(['/docente-inicio']);
+    } else {
+      return this.router.navigate(['/estudiantes-inicio']);
+    }
   }
 }

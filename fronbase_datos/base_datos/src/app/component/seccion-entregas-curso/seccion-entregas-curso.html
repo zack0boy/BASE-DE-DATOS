@@ -1,0 +1,46 @@
+<div class="entregas-container">
+  <h2 class="section-title">Mis Entregas</h2>
+
+  <div *ngIf="entregas.length === 0" class="empty-state">
+    <p>No tienes entregas registradas aún.</p>
+  </div>
+
+  <div *ngIf="entregas.length > 0" class="entregas-list">
+    <div *ngFor="let entrega of entregas" class="entrega-card">
+      <div class="entrega-header">
+        <div class="entrega-info">
+          <h3>{{ entrega.nombre || entrega.titulo || 'Sin nombre' }}</h3>
+          <p class="entrega-meta">
+            <span *ngIf="entrega.fecha_entrega">Entregado: {{ entrega.fecha_entrega | date:'dd/MM/yyyy HH:mm' }}</span>
+          </p>
+        </div>
+        <span class="entrega-estado" [ngClass]="getEstadoEntrega(entrega.estado)">
+          {{ entrega.estado || 'Pendiente' }}
+        </span>
+      </div>
+
+      <p class="entrega-descripcion">
+        {{ entrega.descripcion || 'Sin descripción' }}
+      </p>
+
+      <div class="entrega-info-extra">
+        <div *ngIf="entrega.archivo" class="archivo">
+          <strong>Archivo:</strong> {{ entrega.archivo }}
+        </div>
+        <div *ngIf="entrega.calificacion" class="calificacion">
+          <strong>Calificación:</strong> {{ entrega.calificacion }}/{{ entrega.puntaje_maximo || 100 }}
+        </div>
+      </div>
+
+      <div *ngIf="entrega.comentarios_docente" class="comentarios">
+        <strong>Comentarios del docente:</strong>
+        <p>{{ entrega.comentarios_docente }}</p>
+      </div>
+
+      <div class="entrega-actions">
+        <button class="btn-descargar">Descargar Entrega</button>
+        <button class="btn-reenviar">Reenviar</button>
+      </div>
+    </div>
+  </div>
+</div>

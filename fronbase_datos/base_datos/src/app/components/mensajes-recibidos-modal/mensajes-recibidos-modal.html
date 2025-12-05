@@ -1,0 +1,65 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Mis Mensajes</h2>
+      <span class="unread-badge" *ngIf="getUnreadCount() > 0">{{ getUnreadCount() }}</span>
+      <button class="close-btn" (click)="closeModal()">
+        <span>&times;</span>
+      </button>
+    </div>
+
+    <!-- Loading state -->
+    <div *ngIf="isLoading" class="loading-state">
+      <p>Cargando mensajes...</p>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="!isLoading && mensajes.length === 0" class="empty-state">
+      <p>No tienes mensajes aún</p>
+    </div>
+
+    <!-- Messages list and detail view -->
+    <div *ngIf="!isLoading && mensajes.length > 0" class="modal-body">
+      <div class="messages-container">
+        <!-- List view -->
+        <div class="messages-list" [class.hide]="selectedMensaje">
+          <div
+            *ngFor="let msg of mensajes"
+            class="message-item"
+            [class.unread]="!msg.leido"
+            [class.active]="selectedMensaje?.id === msg.id"
+            (click)="selectMensaje(msg)"
+          >
+            <div class="message-header">
+              <strong>{{ msg.nombreRemitente || 'Usuario' }}</strong>
+              <span class="unread-indicator" *ngIf="!msg.leido">●</span>
+            </div>
+            <div class="message-subject">{{ msg.asunto }}</div>
+            <div class="message-date">{{ msg.fecha_envio | date: 'short' }}</div>
+          </div>
+        </div>
+
+        <!-- Detail view -->
+        <div class="message-detail" *ngIf="selectedMensaje">
+          <button class="back-btn" (click)="selectedMensaje = null">← Volver</button>
+          <div class="detail-header">
+            <h3>{{ selectedMensaje.asunto }}</h3>
+            <p class="detail-from">De: {{ selectedMensaje.nombreRemitente || 'Usuario' }}</p>
+            <p class="detail-date">{{ selectedMensaje.fecha_envio | date: 'medium' }}</p>
+          </div>
+          <div class="detail-content">
+            {{ selectedMensaje.contenido }}
+          </div>
+          <div class="detail-actions">
+            <button
+              class="btn btn-danger"
+              (click)="deleteMensaje(selectedMensaje)"
+            >
+              🗑️ Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

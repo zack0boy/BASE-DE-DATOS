@@ -1,0 +1,131 @@
+<div class="notas-container">
+  <h2 class="section-title">Calculadora de Ponderaciones de Notas</h2>
+
+  <div class="ponderaciones-wrapper">
+    <div *ngFor="let pond of ponderaciones; let i = index" class="ponderacion-card">
+      <div class="ponderacion-header">
+        <div class="nombre-input">
+          <input
+            type="text"
+            [(ngModel)]="pond.nombre"
+            placeholder="Ej: Prueba 1"
+            class="nombre-field">
+        </div>
+        <button
+          *ngIf="ponderaciones.length > 1"
+          (click)="eliminarPonderacion(i)"
+          class="btn-eliminar"
+          title="Eliminar esta evaluación">
+          ✕
+        </button>
+      </div>
+
+      <div class="ponderacion-inputs">
+        <div class="input-group">
+          <label>Nota Obtenida (0-7)</label>
+          <input
+            type="number"
+            [(ngModel)]="pond.nota"
+            placeholder="Ej: 6.5"
+            min="0"
+            max="7"
+            step="0.1"
+            class="input-field">
+        </div>
+
+        <div class="input-group">
+          <label>Ponderación (%)</label>
+          <input
+            type="number"
+            [(ngModel)]="pond.ponderacion"
+            placeholder="Ej: 30"
+            min="0"
+            max="100"
+            step="1"
+            class="input-field">
+        </div>
+      </div>
+
+      <div class="ponderacion-resultado">
+        <div class="resultado-box">
+          <label>Aporte a Nota Final</label>
+          <input
+            type="text"
+            [value]="pond.resultado !== null ? (pond.resultado | number:'1.2-2') : '-'"
+            readonly
+            class="resultado-field">
+        </div>
+      </div>
+
+      <div class="ponderacion-actions">
+        <button (click)="calcularPonderacion(i)" class="btn-calcular">
+          Calcular
+        </button>
+        <button (click)="limpiarPonderacion(i)" class="btn-limpiar">
+          Limpiar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="agregar-wrapper">
+    <button (click)="agregarPonderacion()" class="btn-agregar">
+      + Agregar Evaluación
+    </button>
+  </div>
+
+  <div class="resumen-ponderaciones">
+    <div class="resumen-header">
+      <h3>Resumen de Ponderaciones</h3>
+      <button (click)="limpiarTodo()" class="btn-limpiar-todo">Limpiar Todo</button>
+    </div>
+
+    <div class="tabla-resumen">
+      <div class="tabla-header">
+        <div class="col-nombre">Evaluación</div>
+        <div class="col-nota">Nota</div>
+        <div class="col-ponderacion">Ponderación</div>
+        <div class="col-aporte">Aporte</div>
+      </div>
+
+      <div *ngFor="let pond of ponderaciones" class="tabla-fila">
+        <div class="col-nombre">{{ pond.nombre }}</div>
+        <div class="col-nota">{{ pond.nota !== null ? (pond.nota | number:'1.1-1') : '-' }}</div>
+        <div class="col-ponderacion">{{ pond.ponderacion !== null ? (pond.ponderacion | number:'1.0-0') + '%' : '-' }}</div>
+        <div class="col-aporte">{{ pond.resultado !== null ? (pond.resultado | number:'1.2-2') : '-' }}</div>
+      </div>
+    </div>
+
+    <div class="suma-ponderaciones">
+      <strong>Suma de Ponderaciones:</strong>
+      <span>{{ sumaPonderaciones | number:'1.0-0' }}%</span>
+    </div>
+  </div>
+
+  <div class="nota-final-section">
+    <button (click)="calcularNotaFinal()" class="btn-calcular-final">
+      Calcular Nota Final
+    </button>
+
+    <div *ngIf="notaFinal !== null" class="nota-final-box">
+      <h3>Nota Final Ponderada</h3>
+      <div class="nota-final-value">{{ notaFinal | number:'1.2-2' }}</div>
+      <p class="nota-description">
+        <span *ngIf="notaFinal >= 4" class="aprobado">✓ Aprobado</span>
+        <span *ngIf="notaFinal < 4" class="reprobado">✗ Reprobado</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <p><strong>Cómo usar:</strong></p>
+    <ul>
+      <li>Ingresa el nombre de cada evaluación (opcional)</li>
+      <li>Ingresa la nota obtenida (0-7) y su ponderación en porcentaje (%)</li>
+      <li>Haz clic en "Calcular" para cada evaluación</li>
+      <li>La suma de ponderaciones debe ser 100%</li>
+      <li>Haz clic en "Calcular Nota Final" para obtener tu promedio ponderado</li>
+      <li>Ejemplo: Si tienes 6.5 en una prueba con 30% de ponderación, aportará 1.95 a tu nota final</li>
+    </ul>
+  </div>
+</div>

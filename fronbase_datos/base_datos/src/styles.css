@@ -12,3 +12,10 @@ body {
 .main-content {
   flex: 1; /* Empuja el footer abajo */
 }
+
+/* Small icon utility for SVGs (fallback if Tailwind isn't loaded) */
+.icon-sm {
+  width: 16px !important;
+  height: 16px !important;
+  display: inline-block;
+}

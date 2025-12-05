@@ -1,0 +1,29 @@
+<app-header></app-header>
+
+<main class="main-content">
+  <div class="container">
+    <div class="header-section">
+      <h1>Mis Asignaturas</h1>
+      <p class="welcome-message">
+        Bienvenido {{ docenteName }}. Aquí puedes gestionar todos tus cursos asignados.
+      </p>
+    </div>
+
+    <!-- Loading spinner -->
+    <div *ngIf="isLoading" class="loading-spinner">
+      <p>Cargando tus asignaturas...</p>
+    </div>
+
+    <!-- Course Cards Component -->
+    <app-course-cards
+      *ngIf="!isLoading"
+      [userCareer]="departamento"
+      [userClass]="''"
+      [isAdmin]="isAdmin"
+      [preloadedAsignaturas]="asignaturas"
+      [isLoadingAsignaturas]="isLoading">
+    </app-course-cards>
+  </div>
+</main>
+
+<app-footer></app-footer>

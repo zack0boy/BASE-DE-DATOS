@@ -1,0 +1,155 @@
+.actividades-container {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
+  font-size: 16px;
+}
+
+.actividades-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.actividad-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.3s ease;
+  border-left: 4px solid #0084d4;
+}
+
+.actividad-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 132, 212, 0.1);
+}
+
+.actividad-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.actividad-info h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #1a1a1a;
+}
+
+.actividad-meta {
+  font-size: 12px;
+  color: #999;
+  margin: 0;
+}
+
+.actividad-estado {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.estado-abierta {
+  background-color: #e8f5e9;
+  color: #388e3c;
+}
+
+.estado-cerrada {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.estado-pendiente {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.estado-vencida {
+  background-color: #fcebee;
+  color: #d32f2f;
+}
+
+.actividad-descripcion {
+  font-size: 14px;
+  color: #555;
+  margin: 12px 0;
+  line-height: 1.5;
+}
+
+.actividad-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn-entregar,
+.btn-ver {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-entregar {
+  background-color: #0084d4;
+  color: white;
+}
+
+.btn-entregar:hover {
+  background-color: #0066aa;
+}
+
+.btn-ver {
+  background-color: white;
+  color: #0084d4;
+  border: 1px solid #0084d4;
+  text-decoration: none;
+}
+
+.btn-ver:hover {
+  background-color: #f0f8ff;
+}
+
+@media (max-width: 768px) {
+  .actividades-container {
+    padding: 16px;
+  }
+
+  .actividad-header {
+    flex-direction: column;
+  }
+
+  .actividad-estado {
+    align-self: flex-start;
+  }
+
+  .actividad-actions {
+    flex-direction: column;
+  }
+
+  .btn-entregar,
+  .btn-ver {
+    width: 100%;
+  }
+}

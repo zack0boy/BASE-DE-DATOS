@@ -1,0 +1,41 @@
+<div class="evaluaciones-container">
+  <h2 class="section-title">Evaluaciones</h2>
+
+  <div *ngIf="evaluaciones.length === 0" class="empty-state">
+    <p>No hay evaluaciones disponibles aún.</p>
+  </div>
+
+  <div *ngIf="evaluaciones.length > 0" class="evaluaciones-list">
+    <div *ngFor="let evaluacion of evaluaciones" class="evaluacion-card">
+      <div class="evaluacion-header">
+        <div class="evaluacion-info">
+          <h3>{{ evaluacion.nombre || evaluacion.titulo || 'Sin nombre' }}</h3>
+          <p class="evaluacion-meta">
+            <span *ngIf="evaluacion.fecha_inicio">Inicio: {{ evaluacion.fecha_inicio | date:'dd/MM/yyyy HH:mm' }}</span>
+            <span *ngIf="evaluacion.fecha_fin"> | Cierre: {{ evaluacion.fecha_fin | date:'dd/MM/yyyy HH:mm' }}</span>
+          </p>
+        </div>
+        <span class="evaluacion-estado" [ngClass]="getEstadoClass(evaluacion.estado)">
+          {{ evaluacion.estado || 'Próxima' }}
+        </span>
+      </div>
+
+      <p class="evaluacion-descripcion">
+        {{ evaluacion.descripcion || 'Sin descripción' }}
+      </p>
+
+      <div class="evaluacion-info-extra">
+        <div *ngIf="evaluacion.calificacion" class="calificacion">
+          <strong>Calificación:</strong> {{ evaluacion.calificacion }}/{{ evaluacion.puntaje_maximo || 100 }}
+        </div>
+        <div *ngIf="evaluacion.tipo" class="tipo">
+          <strong>Tipo:</strong> {{ evaluacion.tipo }}
+        </div>
+      </div>
+
+      <div class="evaluacion-actions">
+        <button class="btn-responder">Responder Evaluación</button>
+      </div>
+    </div>
+  </div>
+</div>

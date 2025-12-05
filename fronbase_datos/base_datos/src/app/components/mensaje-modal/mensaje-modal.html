@@ -1,0 +1,64 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Enviar Mensaje a {{ recipientName }}</h2>
+      <button class="close-btn" (click)="closeModal()">
+        <span>&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Error message -->
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Success message -->
+      <div *ngIf="successMessage" class="alert alert-success">
+        {{ successMessage }}
+      </div>
+
+      <!-- Form -->
+      <div class="form-group">
+        <label for="asunto">Asunto</label>
+        <input
+          type="text"
+          id="asunto"
+          [(ngModel)]="asunto"
+          placeholder="Escriba el asunto del mensaje"
+          class="form-control"
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="mensaje">Mensaje</label>
+        <textarea
+          id="mensaje"
+          [(ngModel)]="mensaje"
+          placeholder="Escriba su mensaje aquí"
+          class="form-control"
+          rows="6"
+          [disabled]="isLoading"
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        class="btn btn-secondary"
+        (click)="closeModal()"
+        [disabled]="isLoading"
+      >
+        Cancelar
+      </button>
+      <button
+        class="btn btn-primary"
+        (click)="sendMessage()"
+        [disabled]="isLoading || !mensaje.trim() || !asunto.trim()"
+      >
+        {{ isLoading ? 'Enviando...' : 'Enviar Mensaje' }}
+      </button>
+    </div>
+  </div>
+</div>

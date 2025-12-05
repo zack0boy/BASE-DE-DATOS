@@ -1,2 +1,27 @@
 <app-header></app-header>
+
+<main class="main-content">
+  <div class="container">
+    <h1>Mis Cursos</h1>
+    <p class="welcome-message">
+      Bienvenido a tu panel de estudiante. Aquí puedes ver y gestionar todos tus cursos.
+    </p>
+
+    <!-- Loading spinner -->
+    <div *ngIf="isLoading" class="loading-spinner">
+      <p>Cargando tus asignaturas...</p>
+    </div>
+
+    <!-- Course Cards Component -->
+    <app-course-cards
+      *ngIf="!isLoading"
+      [userCareer]="userCareer"
+      [userClass]="userClass"
+      [isAdmin]="isAdmin"
+      [preloadedAsignaturas]="asignaturas"
+      [isLoadingAsignaturas]="isLoading">
+    </app-course-cards>
+  </div>
+</main>
+
 <app-footer></app-footer>

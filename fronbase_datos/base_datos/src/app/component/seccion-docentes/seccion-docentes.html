@@ -1,0 +1,95 @@
+<div class="docentes-container">
+  <div class="docentes-header">
+    <div class="header-title">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg>
+      <h2>Docentes</h2>
+    </div>
+
+    <!-- Botón para gestionar horarios disponibles (solo docentes) -->
+    <button
+      *ngIf="isDocente"
+      class="btn-horarios"
+      (click)="abrirHorarioModal()"
+      title="Gestionar tus horarios disponibles"
+    >
+      ⏰ Mis Horarios
+    </button>
+  </div>
+
+  <div class="teachers-list">
+    <ng-container *ngIf="teachers && teachers.length > 0; else noTeachers">
+      <div *ngFor="let teacher of teachers" class="teacher-card">
+        <div class="teacher-header">
+          <div class="teacher-info">
+            <h3>{{ teacher.nombre }} {{ teacher.apellido }}</h3>
+            <p class="department">{{ teacher.departamento }}</p>
+          </div>
+        </div>
+
+        <div class="teacher-details">
+          <div class="detail-item" *ngIf="teacher.email">
+            <span class="label">📧 Email:</span>
+            <span class="value">{{ teacher.email }}</span>
+          </div>
+          <div class="detail-item" *ngIf="teacher.horarioAtencion">
+            <span class="label">⏰ Horario:</span>
+            <span class="value">{{ teacher.horarioAtencion }}</span>
+          </div>
+          <div class="detail-item" *ngIf="teacher.descripcion">
+            <span class="label">📝 Descripción:</span>
+            <p class="value-text">{{ teacher.descripcion }}</p>
+          </div>
+        </div>
+
+        <div class="teacher-actions">
+          <!-- Botón enviar mensaje (para todos) -->
+          <button
+            class="btn btn-message"
+            (click)="enviarMensaje(teacher)"
+            title="Enviar mensaje al docente"
+          >
+            ✉️ Mensaje
+          </button>
+
+          <!-- Botón agendar hora (solo estudiantes) -->
+          <button
+            *ngIf="!isDocente"
+            class="btn btn-schedule"
+            (click)="agendarHora(teacher)"
+            title="Agendar una cita"
+          >
+            📅 Agendar Cita
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #noTeachers>
+      <p class="no-teachers">No hay docentes asignados a este curso.</p>
+    </ng-template>
+  </div>
+
+  <!-- Modales -->
+  <app-mensaje-modal
+    [isOpen]="showMensajeModal"
+    [senderId]="currentUser?.id || ''"
+    [recipientId]="selectedDocente?.id || ''"
+    [recipientName]="(selectedDocente?.nombre || '') + ' ' + (selectedDocente?.apellido || '')"
+    (close)="closeMensajeModal()"
+  ></app-mensaje-modal>
+
+  <app-agendar-hora-modal
+    [isOpen]="showAgendarHoraModal"
+    [docente]="selectedDocente"
+    [usuarioId]="currentUser?.id || ''"
+    (close)="closeAgendarHoraModal()"
+  ></app-agendar-hora-modal>
+
+  <app-horario-disponible-modal
+    [isOpen]="showHorarioModal"
+    [docenteId]="currentUser?.id || ''"
+    (close)="closeHorarioModal()"
+  ></app-horario-disponible-modal>
+</div>

@@ -7,32 +7,35 @@ import { Observable, tap } from 'rxjs';
 export class AuthService {
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_KEY = 'user_data';
-  
+
   constructor(
     private api: ApiService,
     private router: Router
   ) {}
 
   login(rut: string, password: string): Observable<any> {
+    console.log('AuthService - Attempting login for user:', rut);
     return this.api.create('login', { rut, password }).pipe(
       tap({
         next: (res: any) => {
-          console.log('Login response:', res);
-          if (res && res.id_usuario) {
+          console.log('AuthService - Login response:', res);
+          if (res?.user?.id_usuario) {  // Check for the nested user object
             // Store token and user data
             localStorage.setItem(this.TOKEN_KEY, 'dummy-token');
-            localStorage.setItem(this.USER_KEY, JSON.stringify({
-              id: res.id_usuario,
-              name: res.nombre,
-              role: res.id_rol
-            }));
-            console.log('User logged in successfully');
+            const userData = {
+              id: res.user.id_usuario,
+              name: res.user.nombre,
+              role: res.user.id_rol
+            };
+            localStorage.setItem(this.USER_KEY, JSON.stringify(userData));
+            console.log('AuthService - Login successful for user ID:', userData.id);
           } else {
+            console.error('AuthService - Invalid login response format:', res);
             throw new Error('Formato de respuesta de inicio de sesión inválido');
           }
         },
         error: (error) => {
-          console.error('Login error:', error);
+          console.error('AuthService - Login error:', error);
           this.clearSession();
           throw error;
         }

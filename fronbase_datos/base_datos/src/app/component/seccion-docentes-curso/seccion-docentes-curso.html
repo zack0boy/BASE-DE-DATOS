@@ -1,0 +1,51 @@
+<div class="docentes-container">
+  <h2 class="section-title">Docentes</h2>
+
+  <div *ngIf="docentes.length === 0" class="empty-state">
+    <p>No hay docentes asignados a esta asignatura.</p>
+  </div>
+
+  <div *ngIf="docentes.length > 0" class="docentes-grid">
+    <div *ngFor="let docente of docentes" class="docente-card">
+      <div class="docente-foto">
+        <img *ngIf="docente.fotoUrl" [src]="docente.fotoUrl" alt="Foto de {{ getNombreCompleto(docente) }}">
+        <div *ngIf="!docente.fotoUrl" class="foto-placeholder">
+          {{ getNombreCompleto(docente).charAt(0).toUpperCase() }}
+        </div>
+      </div>
+
+      <div class="docente-info">
+        <h3>{{ getNombreCompleto(docente) }}</h3>
+
+        <div class="docente-detail" *ngIf="docente.email">
+          <strong>Email:</strong>
+          <a [href]="'mailto:' + docente.email">{{ docente.email }}</a>
+        </div>
+
+        <div class="docente-detail" *ngIf="docente.telefono">
+          <strong>Teléfono:</strong>
+          <span>{{ docente.telefono }}</span>
+        </div>
+
+        <div class="docente-detail" *ngIf="docente.departamento">
+          <strong>Departamento:</strong>
+          <span>{{ docente.departamento }}</span>
+        </div>
+
+        <div class="docente-detail" *ngIf="docente.horarioAtencion">
+          <strong>Horario de Atención:</strong>
+          <span>{{ docente.horarioAtencion }}</span>
+        </div>
+
+        <div class="docente-descripcion" *ngIf="docente.descripcion">
+          <p>{{ docente.descripcion }}</p>
+        </div>
+      </div>
+
+      <div class="docente-actions">
+        <button class="btn-mensaje">Enviar Mensaje</button>
+        <button class="btn-agendar">Agendar Hora</button>
+      </div>
+    </div>
+  </div>
+</div>

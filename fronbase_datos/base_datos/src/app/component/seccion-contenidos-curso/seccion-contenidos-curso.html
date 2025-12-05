@@ -1,0 +1,31 @@
+<div class="contenidos-container">
+  <h2 class="section-title">Contenidos</h2>
+
+  <div *ngIf="contenidos.length === 0" class="empty-state">
+    <p>No hay contenidos disponibles aún.</p>
+  </div>
+
+  <div *ngIf="contenidos.length > 0" class="contenidos-list">
+    <div *ngFor="let contenido of contenidos" class="contenido-card">
+      <div class="contenido-header">
+        <div class="contenido-info">
+          <h3>{{ contenido.titulo || contenido.nombre || 'Sin título' }}</h3>
+          <p class="contenido-meta">{{ contenido.fecha | date:'dd/MM/yyyy' }}</p>
+        </div>
+        <span class="contenido-tipo" [ngClass]="'tipo-' + (contenido.tipo || 'otro')">
+          {{ contenido.tipo || 'Contenido' }}
+        </span>
+      </div>
+
+      <p class="contenido-descripcion">
+        {{ contenido.descripcion || 'Sin descripción' }}
+      </p>
+
+      <div class="contenido-actions">
+        <a *ngIf="contenido.url" [href]="contenido.url" target="_blank" class="btn-download">
+          Descargar / Ver
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

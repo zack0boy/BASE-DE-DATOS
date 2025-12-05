@@ -1,0 +1,19 @@
+<div class="unidades-container">
+  <h2 class="unidades-titulo">Unidades de Aprendizaje</h2>
+
+  <div class="unidades-list">
+    <div *ngIf="contenidos.length === 0 && unidades.length === 0" class="unidades-empty">
+      <p>No hay unidades disponibles</p>
+    </div>
+
+    <div *ngFor="let contenido of contenidos; let i = index" class="unidad-item">
+      <div class="unidad-header">
+        <span class="unidad-numero">Unidad {{ i + 1 }}</span>
+        <h3 class="unidad-titulo">{{ contenido.titulo || contenido.nombre || 'Sin título' }}</h3>
+      </div>
+      <div class="unidad-contenido">
+        <p>{{ contenido.descripcion || contenido.contenido || 'Sin descripción' }}</p>
+      </div>
+    </div>
+  </div>
+</div>

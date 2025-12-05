@@ -1,0 +1,163 @@
+<div class="container-fluid p-4">
+    <div class="card filters-card mb-4 border-0 shadow-sm">
+        <div class="card-body py-3">
+            <div class="filters-row d-flex flex-wrap align-items-center gap-2">
+
+                <div class="filter-item">
+                    <select class="form-select form-select-sm" [(ngModel)]="estadoFilter" (ngModelChange)="filterCourses()">
+                        <option value="todos">Todos los estados</option>
+                        <option *ngFor="let estado of estados" [value]="estado.value">{{estado.label}}</option>
+                    </select>
+                </div>
+
+                <div class="filter-item flex-fill">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input class="form-control" placeholder="Buscar cursos..." [(ngModel)]="searchTerm" (input)="filterCourses()">
+                    </div>
+                </div>
+
+                <div class="filter-item">
+                    <label class="form-label mb-0 me-2 text-muted small d-none d-md-inline">Ordenar por:</label>
+                    <select class="form-select form-select-sm" [(ngModel)]="ordenarPor" (ngModelChange)="filterCourses()">
+                        <option value="nombre">Nombre del curso</option>
+                        <option value="codigo">Código</option>
+                    </select>
+                </div>
+
+                <div class="filter-item">
+                    <select class="form-select form-select-sm" [(ngModel)]="viewMode" (ngModelChange)="filterCourses()">
+                        <option value="tarjeta">Vista: Tarjeta</option>
+                        <option value="lista">Vista: Lista</option>
+                    </select>
+                </div>
+
+                  <div class="filter-item d-flex align-items-center">
+                      <label class="form-label mb-0 me-2 text-muted small d-none d-md-inline">Sección:</label>
+                      <select class="form-select form-select-sm" [(ngModel)]="seccionFilter" (ngModelChange)="filterCourses()">
+                          <option value="todas">Todas las secciones</option>
+                          <option value="A">Sección A</option>
+                          <option value="B">Sección B</option>
+                          <option value="C">Sección C</option>
+                          <option value="D">Sección D</option>
+                      </select>
+                  </div>
+
+                <div class="filter-item ms-auto">
+                    <button class="btn btn-sm btn-outline-secondary" (click)="searchTerm = ''; estadoFilter = 'todos'; seccionFilter = 'todas'; ordenarPor = 'nombre'; viewMode='tarjeta'; filterCourses()">Limpiar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p class="mt-2">Cargando cursos...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !isLoading" class="alert alert-danger" role="alert">
+    <div class="d-flex align-items-center">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      <div>
+        {{ error }}
+        <button class="btn btn-sm btn-outline-danger ms-2" (click)="loadAndFilterCourses()">
+          <i class="bi bi-arrow-repeat"></i> Reintentar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- (Filtro duplicado eliminado: se usa la cabecera horizontal de filtros arriba) -->
+
+  <!-- Course List -->
+  <div *ngIf="!isLoading && !error" class="course-list">
+    <ng-container *ngFor="let careerGroup of filteredCareerGroups; trackBy: trackByCareerId">
+      <div class="career-header mb-3 p-3 rounded d-flex justify-content-between align-items-center">
+        <div class="career-name">{{ careerGroup.nombre }}</div>
+      </div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+  <div *ngFor="let course of careerGroup.cursos; trackBy: trackByCourseId" class="col">
+    <div class="card h-100 border-0 shadow-sm course-card">
+      <!-- Parte superior de la tarjeta -->
+      <div class="card-top" [style.background]="getCourseColor(course)">
+        <div class="card-top-inner d-flex justify-content-between align-items-end w-100">
+          <div class="card-top-title ps-3 pb-2">
+            {{ course.nombre }} <span class="card-top-section">- {{ course.seccion }}</span>
+          </div>
+          <div class="card-code me-3">{{ course.codigo }}</div>
+        </div>
+      </div>
+
+      <!-- Cuerpo de la tarjeta -->
+      <div class="card-body pt-3">
+        <p class="card-text text-muted small mb-3">{{ course.descripcion }}</p>
+
+        <!-- Progreso -->
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <small class="text-muted">Progreso</small>
+          <small class="fw-medium">{{ course.progreso }}%</small>
+        </div>
+        <div class="progress mb-3" style="height: 6px;">
+          <div class="progress-bar" [ngClass]="getEstadoBadgeClass(course.progreso)"
+               [style.width.%]="course.progreso" role="progressbar"></div>
+        </div>
+
+        <!-- Estado y botón -->
+        <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+          <span class="badge"
+                [ngClass]="{
+                  'bg-success': course.progreso >= 100,
+                  'bg-primary': course.progreso > 0 && course.progreso < 100,
+                  'bg-warning text-dark': course.progreso === 0
+                }">
+            {{ course.progreso >= 100 ? 'Completado' : (course.progreso > 0 ? 'En progreso' : 'Pendiente') }}
+          </span>
+          <button class="btn btn-sm btn-outline-primary" (click)="router.navigate(['/estudiantes-contenido', course.id])">
+            Ingresar <i class="bi bi-arrow-right ms-1"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="viewMode==='lista'" class="list-view">
+  <div *ngFor="let course of careerGroup.cursos; trackBy: trackByCourseId" class="col-12 mb-3">
+    <div class="card h-100 border-0 shadow-sm course-card list-card">
+      <!-- Parte superior de la tarjeta -->
+      <div class="card-top" [style.background]="getCourseColor(course)">
+        <div class="card-top-inner d-flex justify-content-between align-items-end w-100">
+          <div class="card-top-title ps-3 pb-2">
+            {{ course.nombre }} <span class="card-top-section">- {{ course.seccion }}</span>
+          </div>
+          <div class="card-code me-3">{{ course.codigo }}</div>
+        </div>
+      </div>
+
+      <!-- Cuerpo de la tarjeta -->
+      <div class="card-body pt-3">
+        <div class="row align-items-center">
+          <div class="col-md-9">
+            <p class="card-text text-muted small mb-2">{{ course.descripcion }}</p>
+            <div class="text-muted small">{{ course.carrera_nombre || '' }} · {{ course.location || '' }}</div>
+          </div>
+          <div class="col-md-3 text-end">
+            <div class="mb-2"><small class="text-muted">{{ course.progreso }}%</small></div>
+            <div class="progress mb-2" style="height:6px;">
+              <div class="progress-bar" [ngClass]="getEstadoBadgeClass(course.progreso)" [style.width.%]="course.progreso" role="progressbar"></div>
+            </div>
+            <button class="btn btn-sm btn-outline-primary" (click)="router.navigate(['/estudiantes-contenido', course.id])">Ingresar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

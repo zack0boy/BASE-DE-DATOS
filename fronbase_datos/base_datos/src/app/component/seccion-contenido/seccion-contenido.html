@@ -1,0 +1,66 @@
+<div class="seccion-contenido">
+  <div class="seccion-header">
+    <h2>{{ titulo }}</h2>
+  </div>
+
+  <!-- Presentación -->
+  <div *ngIf="tipo === 'presentacion'" class="contenido-presentacion">
+    <div *ngIf="contenido && contenido.length > 0" class="items-list">
+      <div *ngFor="let item of contenido" class="item">
+        <p>{{ item.descripcion || item.content || 'Sin descripción' }}</p>
+      </div>
+    </div>
+    <div *ngIf="!contenido || contenido.length === 0" class="empty-state">
+      <p>No hay información de presentación disponible.</p>
+    </div>
+  </div>
+
+  <!-- Avisos -->
+  <div *ngIf="tipo === 'avisos'" class="contenido-avisos">
+    <div *ngIf="contenido && contenido.length > 0" class="items-list">
+      <div *ngFor="let aviso of contenido" class="aviso-item">
+        <div class="aviso-header">
+          <h3>{{ aviso.titulo || aviso.title }}</h3>
+          <span class="aviso-fecha">{{ aviso.fecha || aviso.createdAt }}</span>
+        </div>
+        <p>{{ aviso.contenido || aviso.content }}</p>
+      </div>
+    </div>
+    <div *ngIf="!contenido || contenido.length === 0" class="empty-state">
+      <p>No hay avisos disponibles.</p>
+    </div>
+  </div>
+
+  <!-- Unidades -->
+  <div *ngIf="tipo === 'unidades'" class="contenido-unidades">
+    <div *ngIf="contenido && contenido.length > 0" class="items-list">
+      <div *ngFor="let unidad of contenido" class="unidad-item">
+        <div class="unidad-header">
+          <h3>{{ unidad.nombre || unidad.name }}</h3>
+        </div>
+        <p>{{ unidad.descripcion || unidad.description }}</p>
+      </div>
+    </div>
+    <div *ngIf="!contenido || contenido.length === 0" class="empty-state">
+      <p>No hay unidades disponibles.</p>
+    </div>
+  </div>
+
+  <!-- Recursos -->
+  <div *ngIf="tipo === 'recursos'" class="contenido-recursos">
+    <div *ngIf="contenido && contenido.length > 0" class="items-list">
+      <div *ngFor="let recurso of contenido" class="recurso-item">
+        <div class="recurso-header">
+          <h3>{{ recurso.nombre || recurso.name }}</h3>
+        </div>
+        <p>{{ recurso.descripcion || recurso.description }}</p>
+        <a *ngIf="recurso.url || recurso.enlace" [href]="recurso.url || recurso.enlace" target="_blank" class="recurso-link">
+          Descargar / Ver
+        </a>
+      </div>
+    </div>
+    <div *ngIf="!contenido || contenido.length === 0" class="empty-state">
+      <p>No hay recursos disponibles.</p>
+    </div>
+  </div>
+</div>

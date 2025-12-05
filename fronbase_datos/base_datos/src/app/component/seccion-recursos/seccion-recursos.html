@@ -1,0 +1,25 @@
+<div class="recursos-container">
+  <h2 class="recursos-titulo">Recursos de la Biblioteca</h2>
+
+  <div class="recursos-list">
+    <div *ngIf="recursos.length === 0" class="recursos-empty">
+      <p>No hay recursos disponibles</p>
+    </div>
+
+    <div *ngFor="let recurso of recursos" class="recurso-item">
+      <div class="recurso-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+          <polyline points="13 2 13 9 20 9"></polyline>
+        </svg>
+      </div>
+      <div class="recurso-contenido">
+        <h3 class="recurso-titulo">{{ recurso.titulo || recurso.nombre || 'Recurso' }}</h3>
+        <p class="recurso-descripcion">{{ recurso.descripcion || 'Sin descripción' }}</p>
+        <a *ngIf="recurso.url" [href]="recurso.url" target="_blank" class="recurso-link">
+          Descargar / Ver recurso →
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

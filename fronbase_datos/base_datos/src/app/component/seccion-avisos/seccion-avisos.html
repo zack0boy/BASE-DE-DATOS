@@ -1,0 +1,17 @@
+<div class="avisos-container">
+  <h2 class="avisos-titulo">Avisos</h2>
+
+  <div class="avisos-list">
+    <div *ngIf="avisos.length === 0" class="avisos-empty">
+      <p>No hay avisos disponibles</p>
+    </div>
+
+    <div *ngFor="let aviso of avisos" class="aviso-item">
+      <div class="aviso-fecha">{{ aviso.fecha_creacion | date: 'dd/MM/yyyy' }}</div>
+      <div class="aviso-contenido">
+        <h3 class="aviso-titulo">{{ aviso.titulo || 'Sin título' }}</h3>
+        <p class="aviso-texto">{{ aviso.descripcion || aviso.contenido || '' }}</p>
+      </div>
+    </div>
+  </div>
+</div>

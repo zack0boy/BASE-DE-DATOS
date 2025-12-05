@@ -1,0 +1,118 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Gestionar Horarios Disponibles</h2>
+      <button class="close-btn" (click)="closeModal()">
+        <span>&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Error message -->
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+
+      <!-- Success message -->
+      <div *ngIf="successMessage" class="alert alert-success">
+        {{ successMessage }}
+      </div>
+
+      <!-- Form para agregar horarios -->
+      <div class="add-horario-section">
+        <h3>Agregar Nuevo Horario</h3>
+
+        <div class="form-group">
+          <label for="dia">Día</label>
+          <select
+            id="dia"
+            [(ngModel)]="selectedDia"
+            class="form-control"
+            [disabled]="isLoading"
+          >
+            <option *ngFor="let dia of dias" [value]="dia">
+              {{ dia }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="horaInicio">Hora Inicio</label>
+            <input
+              type="time"
+              id="horaInicio"
+              [(ngModel)]="selectedHoraInicio"
+              class="form-control"
+              [disabled]="isLoading"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="horaFin">Hora Fin</label>
+            <input
+              type="time"
+              id="horaFin"
+              [(ngModel)]="selectedHoraFin"
+              class="form-control"
+              [disabled]="isLoading"
+            />
+          </div>
+        </div>
+
+        <button
+          class="btn btn-add"
+          (click)="agregarHorario()"
+          [disabled]="isLoading"
+        >
+          ➕ Agregar Horario
+        </button>
+      </div>
+
+      <!-- Lista de horarios agregados -->
+      <div class="horarios-list-section" *ngIf="horariosDisponibles.length > 0">
+        <h3>Horarios Agregados</h3>
+        <div class="horarios-list">
+          <div
+            *ngFor="let horario of horariosDisponibles; let i = index; trackBy: trackByIndex"
+            class="horario-item"
+          >
+            <div class="horario-info">
+              <span class="dia"><strong>{{ horario.dia }}</strong></span>
+              <span class="horas">{{ horario.horaInicio }} - {{ horario.horaFin }}</span>
+            </div>
+            <button
+              class="btn-delete"
+              (click)="eliminarHorario(i)"
+              [disabled]="isLoading"
+              title="Eliminar horario"
+            >
+              🗑️
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="horariosDisponibles.length === 0" class="empty-message">
+        No hay horarios agregados aún
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        class="btn btn-secondary"
+        (click)="closeModal()"
+        [disabled]="isLoading"
+      >
+        Cancelar
+      </button>
+      <button
+        class="btn btn-primary"
+        (click)="guardarHorarios()"
+        [disabled]="isLoading || horariosDisponibles.length === 0"
+      >
+        {{ isLoading ? 'Guardando...' : '💾 Guardar Horarios' }}
+      </button>
+    </div>
+  </div>
+</div>

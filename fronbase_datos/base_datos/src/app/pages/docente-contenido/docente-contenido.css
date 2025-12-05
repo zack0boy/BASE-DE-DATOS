@@ -1,0 +1,84 @@
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Contenedor de página */
+.contenido-page {
+  min-height: calc(100vh - 200px);
+  background-color: #f5f5f5;
+  padding-bottom: 2rem;
+}
+
+.container-ancho {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Utilidades de espaciado */
+.mt-4 {
+  margin-top: 2rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.mt-8 {
+  margin-top: 2rem;
+}
+
+.edit-button-container {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-edit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.6);
+}
+
+.btn-edit.active {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  box-shadow: 0 4px 12px rgba(67, 233, 123, 0.4);
+}
+
+.btn-edit.active:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(67, 233, 123, 0.6);
+}
+
+@media (max-width: 768px) {
+  .container-ancho {
+    padding: 0 1rem;
+  }
+
+  .btn-edit {
+    width: 100%;
+    justify-content: center;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}
