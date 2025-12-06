@@ -614,6 +614,43 @@ class LoginView(APIView):
             "nombre": usuario.nombre,
             "apellido": usuario.apellido
         }, status=status.HTTP_200_OK)
+    
+class LoginView(APIView):
+    def post(self, request):
+        rut = request.data.get("rut")
+        password = request.data.get("password")
+
+        if not rut or not password:
+            return Response({"detail": "RUT y contraseña obligatorios"}, status=400)
+
+        try:
+            usuario = JngUsuario.objects.get(rut=rut)
+        except JngUsuario.DoesNotExist:
+            return Response({"detail": "Usuario no encontrado"}, status=404)
+
+        if usuario.password != password:
+            return Response({"detail": "Contraseña incorrecta"}, status=401)
+
+        # tu lógica para identificar por RUT
+        rut_inicio = rut[0]
+
+        if rut_inicio == "2":
+            tipo = "docente"
+        elif rut_inicio == "3":
+            tipo = "alumno"
+        elif rut_inicio == "1":
+            tipo = "admin"
+        else:
+            tipo = "desconocido"
+
+        return Response({
+            "id_usuario": usuario.id_usuario,
+            "nombre": usuario.nombre,
+            "apellido": usuario.apellido,
+            "rut": usuario.rut,
+            "id_rol": usuario.id_rol_id,
+            "tipo_usuario": tipo
+        })
 
 class JngUniversidadModelViewSet(viewsets.ModelViewSet):
     queryset = JngUniversidad.objects.all()

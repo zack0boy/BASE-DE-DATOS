@@ -19,7 +19,8 @@ export class LoginComponet implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+        private auth: AuthService, 
   ) {}
 
   ngOnInit() {
@@ -79,6 +80,31 @@ export class LoginComponet implements OnInit {
         this.isLoading = false;
       }
     });
+    this.auth.login(this.rut, this.password).subscribe({
+  next: (res) => {
+    console.log("Login response:", res);
+
+    const idRol = Number(res.id_rol); // <-- CORRECCIÓN
+
+    if (idRol === 6) {
+      // DOCENTE
+      this.router.navigate(['/docente-inicio']);
+    } 
+    else if (idRol === 7) {
+      // ALUMNO
+      this.router.navigate(['/estudiante-inicio']);
+    }
+    else if (idRol === 5) {
+      // ADMIN
+      this.router.navigate(['/admin-dashboard']);
+    }
+    else {
+      // OTROS ROLES
+      this.router.navigate(['/']);
+    }
+  },
+
+});
   }
 
   private redirectByRole() {
