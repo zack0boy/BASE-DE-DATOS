@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-inscripciones-list',
   imports: [],
   templateUrl: './inscripciones-list.html',
-  styleUrl: './inscripciones-list.css',
+  styleUrls: ['./inscripciones-list.css'],
 })
 export class InscripcionesList {
 

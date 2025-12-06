@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-log-admin-list',
   imports: [],
   templateUrl: './log-admin-list.html',
-  styleUrl: './log-admin-list.css',
+  styleUrls: ['./log-admin-list.css'],
 })
 export class LogAdminList {
 
