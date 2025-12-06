@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-mensajes-internos-create',
   imports: [],
   templateUrl: './mensajes-internos-create.html',
-  styleUrl: './mensajes-internos-create.css',
+  styleUrls: ['./mensajes-internos-create.css'],
 })
 export class MensajesInternosCreate {
 

@@ -18,7 +18,7 @@ export interface DocenteDetalle {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './seccion-docentes-curso.html',
-  styleUrl: './seccion-docentes-curso.css'
+  styleUrls: ['./seccion-docentes-curso.css']
 })
 export class SeccionDocentesCursoComponent {
   @Input() docentes: DocenteDetalle[] = [];

@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './seccion-entregas-curso.html',
-  styleUrl: './seccion-entregas-curso.css'
+  styleUrls: ['./seccion-entregas-curso.css']
 })
 export class SeccionEntregasCursoComponent {
   @Input() entregas: any[] = [];

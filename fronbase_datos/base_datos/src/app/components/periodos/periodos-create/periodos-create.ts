@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-periodos-create',
   imports: [],
   templateUrl: './periodos-create.html',
-  styleUrl: './periodos-create.css',
+  styleUrls: ['./periodos-create.css'],
 })
 export class PeriodosCreate {
 

@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './seccion-contenido.html',
-  styleUrl: './seccion-contenido.css'
+  styleUrls: ['./seccion-contenido.css']
 })
 export class SeccionContenidoComponent {
   @Input() titulo: string = '';

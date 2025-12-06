@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-material-curso-list',
   imports: [],
   templateUrl: './material-curso-list.html',
-  styleUrl: './material-curso-list.css',
+  styleUrls: ['./material-curso-list.css'],
 })
 export class MaterialCursoList {
 

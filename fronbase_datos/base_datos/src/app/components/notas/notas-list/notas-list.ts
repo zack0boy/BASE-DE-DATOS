@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-notas-list',
   imports: [],
   templateUrl: './notas-list.html',
-  styleUrl: './notas-list.css',
+  styleUrls: ['./notas-list.css'],
 })
 export class NotasList {
 

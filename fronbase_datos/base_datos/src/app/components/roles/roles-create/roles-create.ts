@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-roles-create',
   imports: [],
   templateUrl: './roles-create.html',
-  styleUrl: './roles-create.css',
+  styleUrls: ['./roles-create.css'],
 })
 export class RolesCreate {
 

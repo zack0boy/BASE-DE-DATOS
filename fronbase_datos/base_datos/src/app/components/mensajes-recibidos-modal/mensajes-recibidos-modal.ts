@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './mensajes-recibidos-modal.html',
-  styleUrl: './mensajes-recibidos-modal.css',
+  styleUrls: ['./mensajes-recibidos-modal.css'],
 })
 export class MensajesRecibidosModal implements OnInit, OnDestroy {
   @Input() isOpen: boolean = false;

@@ -9,7 +9,7 @@ import { ContentModerationService } from '../../services/content-moderation.serv
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './mensaje-modal.html',
-  styleUrl: './mensaje-modal.css',
+  styleUrls: ['./mensaje-modal.css'],
 })
 export class MensajeModal implements OnInit {
   @Input() isOpen: boolean = false;
