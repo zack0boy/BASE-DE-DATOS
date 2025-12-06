@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from django.db import connection, transaction
 from rest_framework import mixins
 import oracledb
+from rest_framework.views import APIView
 
 from .serializers import (
     UsuarioSerializer, RolSerializer, AlumnoSerializer, CarreraSerializer, 
@@ -578,6 +579,41 @@ class JngAlumnoViewSet(SPBasedGenericViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
             return Response({'error': f'Error en eliminación: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
+class LoginView(APIView):
+    def post(self, request):
+        rut = request.data.get("rut")
+        password = request.data.get("password")
+
+        # Validación básica
+        if not rut or not password:
+            return Response(
+                {"detail": "RUT y contraseña son obligatorios"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            usuario = JngUsuario.objects.get(rut=rut)
+        except JngUsuario.DoesNotExist:
+            return Response(
+                {"detail": "Usuario no encontrado"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # Comparación de contraseña (sin hashing, como tu BD actual)
+        if usuario.password != password:
+            return Response(
+                {"detail": "Contraseña incorrecta"},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        # Respuesta para tu Angular (estructura actual que ya funciona)
+        return Response({
+            "message": "Login correcto",
+            "id_usuario": usuario.id_usuario,
+            "id_rol": usuario.id_rol_id,  # importante usar _id
+            "nombre": usuario.nombre,
+            "apellido": usuario.apellido
+        }, status=status.HTTP_200_OK)
 
 class JngUniversidadModelViewSet(viewsets.ModelViewSet):
     queryset = JngUniversidad.objects.all()

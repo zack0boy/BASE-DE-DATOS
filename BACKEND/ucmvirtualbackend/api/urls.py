@@ -12,7 +12,7 @@ from .views import (
     JngAyudantiaModelViewSet, JngContenidoModelViewSet, 
     JngMaterialCursoModelViewSet, JngMensajeInternoModelViewSet, 
     JngAnuncioModelViewSet, JngLogAutenticacionModelViewSet, 
-    JngLogUserAdminModelViewSet,
+    JngLogUserAdminModelViewSet, LoginView
 )
 
 router = DefaultRouter()
@@ -51,4 +51,5 @@ router.register(r'log-admin', JngLogUserAdminModelViewSet, basename='log-admin')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('login/', LoginView.as_view(), name='login'),
 ]
