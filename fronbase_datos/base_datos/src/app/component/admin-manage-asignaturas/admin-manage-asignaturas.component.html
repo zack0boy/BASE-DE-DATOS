@@ -1,0 +1,128 @@
+<div class="admin-asignaturas">
+  <!-- Card Principal -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-gradient-primary text-white border-0">
+      <h5 class="mb-0"><i class="bi bi-book"></i> Gestionar Asignaturas</h5>
+    </div>
+    <div class="card-body">
+      <!-- Filtros y Acciones -->
+      <div class="filter-section mb-4 p-3 bg-light rounded-3">
+        <div class="row g-3 align-items-center">
+          <div class="col-md-auto">
+            <label class="form-label fw-600 text-secondary small mb-2 d-block"><i class="bi bi-funnel"></i> Filtro</label>
+            <input type="text" class="form-control form-control-modern"
+                   [(ngModel)]="searchTerm" placeholder="Buscar...">
+          </div>
+          <div class="col-md-auto">
+            <button class="btn btn-outline-secondary btn-modern btn-sm" (click)="searchTerm = ''">
+              <i class="bi bi-arrow-clockwise"></i> Limpiar
+            </button>
+          </div>
+          <div class="col-md-auto ms-auto">
+            <button class="btn btn-primary btn-modern btn-md" (click)="openCreateModal()">
+              <i class="bi bi-plus-circle"></i> Nueva Asignatura
+            </button>
+          </div>
+          <div class="col-12 mt-2 small text-muted">
+            <strong>{{ getFilteredAsignaturas().length }}</strong> asignatura(s)
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla -->
+      <div class="table-wrapper">
+        <div *ngIf="getFilteredAsignaturas().length === 0" class="empty-state text-center py-5">
+          <i class="bi bi-inbox"></i>
+          <p class="mt-3 text-muted">No hay asignaturas para mostrar</p>
+        </div>
+        <div class="table-responsive" *ngIf="getFilteredAsignaturas().length > 0">
+          <table class="table table-modern table-hover mb-0">
+            <thead>
+              <tr>
+                <th style="width: 35%"><i class="bi bi-book"></i> Asignatura</th>
+                <th style="width: 15%"><i class="bi bi-tag"></i> Código</th>
+                <th style="width: 15%"><i class="bi bi-clock"></i> Horas</th>
+                <th style="width: 15%"><i class="bi bi-layers"></i> Secciones</th>
+                <th style="width: 20%">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let a of pagedAsignaturas(getFilteredAsignaturas())" class="table-row-modern">
+                <td class="fw-600 text-primary">{{ a.nombre }}</td>
+                <td><span class="badge bg-secondary">{{ a.codigo }}</span></td>
+                <td><span class="badge bg-warning text-dark">{{ a.horas || 4 }} h</span></td>
+                <td><span class="badge bg-info text-white">{{ (a.secciones || []).length }}</span></td>
+                <td>
+                  <div class="btn-group btn-group-sm" role="group">
+                    <button class="btn btn-outline-primary" (click)="onEditAsignatura(a)" title="Editar">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-outline-danger" (click)="onDeleteAsignatura(a)" title="Eliminar">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Paginación -->
+        <div class="table-paginator mt-3">
+          <div class="small text-muted">Página {{ page }} de {{ totalPages(getFilteredAsignaturas()) }}</div>
+          <div class="btn-group btn-group-sm" role="group">
+            <button class="btn btn-outline-secondary" (click)="setPage(page-1, getFilteredAsignaturas())" [disabled]="page <= 1">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="btn btn-outline-secondary" (click)="setPage(page+1, getFilteredAsignaturas())" [disabled]="page >= totalPages(getFilteredAsignaturas())">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+          <select class="form-select form-select-sm paginator-size" [(ngModel)]="pageSize" (change)="setPage(1, getFilteredAsignaturas())">
+            <option [value]="5">5</option>
+            <option [value]="10">10</option>
+            <option [value]="25">25</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Crear Asignatura -->
+<div *ngIf="showCreateModal" class="modal-overlay" (click)="closeCreateModal()">
+  <div class="modal-content-modern" (click)="$event.stopPropagation()">
+    <div class="modal-header bg-gradient-primary text-white border-0">
+      <h5 class="modal-title"><i class="bi bi-plus-circle"></i> Crear Nueva Asignatura</h5>
+      <button type="button" class="btn-close btn-close-white" (click)="closeCreateModal()"></button>
+    </div>
+    <div class="modal-body">
+      <div class="mb-3">
+        <label class="form-label fw-600">Nombre</label>
+        <input type="text" class="form-control form-control-modern" [(ngModel)]="newAsignatura.nombre" placeholder="Ej: Calculus I">
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-600">Código</label>
+        <div class="input-group">
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newAsignatura.codigo" placeholder="Auto-generado" readonly>
+          <button class="btn btn-outline-secondary btn-modern" type="button" (click)="generateAsignaturaCode()">
+            <i class="bi bi-arrow-repeat"></i> Generar
+          </button>
+        </div>
+        <small class="text-muted d-block mt-1">El código se genera automáticamente</small>
+      </div>
+      <div class="mb-3">
+        <label class="form-label fw-600">Horas semanales</label>
+        <input type="number" class="form-control form-control-modern" [(ngModel)]="newAsignatura.horas" placeholder="4" min="1" max="12">
+      </div>
+    </div>
+    <div class="modal-footer bg-light border-top">
+      <button type="button" class="btn btn-outline-secondary btn-modern" (click)="closeCreateModal()">Cancelar</button>
+      <button type="button" class="btn btn-primary btn-modern btn-lg" (click)="createAsig()">
+        <i class="bi bi-check-circle"></i> Crear Asignatura
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Overlay Backdrop -->
+<div *ngIf="showCreateModal" class="modal-backdrop"></div>

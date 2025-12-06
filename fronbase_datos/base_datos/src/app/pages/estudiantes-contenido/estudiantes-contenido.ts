@@ -61,7 +61,7 @@ import { ErrorMessageComponent } from '../../shared/error-message/error-message.
     ErrorMessageComponent
   ],
   templateUrl: './estudiantes-contenido.html',
-  styleUrl: './estudiantes-contenido.css',
+  styleUrls: ['./estudiantes-contenido.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EstudiantesContenidoComponent implements OnInit, OnDestroy {
@@ -90,6 +90,7 @@ export class EstudiantesContenidoComponent implements OnInit, OnDestroy {
 
   loading = true;
   error: string | null = null;
+  pageBannerColor: string | null = null;
   private subscriptions = new Subscription();
 
   get docentesNombres(): string[] {
@@ -238,6 +239,14 @@ export class EstudiantesContenidoComponent implements OnInit, OnDestroy {
         this.evaluaciones = data.evaluaciones as any;
         this.anuncios = data.anuncios as any;
         this.programa = undefined;
+
+        // Leer color seleccionado (si existe) para aplicarlo al banner de la asignatura
+        try {
+          const c = localStorage.getItem('selectedCourseColor');
+          this.pageBannerColor = c || null;
+        } catch (e) {
+          this.pageBannerColor = null;
+        }
 
         this.cd.detectChanges();
       },

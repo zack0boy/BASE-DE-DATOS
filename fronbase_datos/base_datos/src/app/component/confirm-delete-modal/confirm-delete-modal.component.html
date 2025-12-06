@@ -1,0 +1,16 @@
+    <div class="modal-overlay" *ngIf="isOpen" (click)="onCancel()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h5>Confirmar eliminación</h5>
+          <button class="btn-close" (click)="onCancel()"></button>
+        </div>
+        <div class="modal-body">
+          <p>¿Estás seguro de que deseas eliminar a <strong>{{ userName }}</strong>?</p>
+          <p class="small text-muted">Esta acción no se puede deshacer.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" (click)="onCancel()">Cancelar</button>
+          <button class="btn btn-danger btn-sm" (click)="onConfirm()">Eliminar</button>
+        </div>
+      </div>
+    </div>

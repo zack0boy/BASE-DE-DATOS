@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-planes-estudio-edit',
   imports: [],
   templateUrl: './planes-estudio-edit.html',
-  styleUrl: './planes-estudio-edit.css',
+  styleUrls: ['./planes-estudio-edit.css'],
 })
 export class PlanesEstudioEdit {
 

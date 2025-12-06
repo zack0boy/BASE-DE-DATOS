@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-secciones-create',
   imports: [],
   templateUrl: './secciones-create.html',
-  styleUrl: './secciones-create.css',
+  styleUrls: ['./secciones-create.css'],
 })
 export class SeccionesCreate {
 

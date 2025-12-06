@@ -12,7 +12,7 @@ export interface Tab {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './tabs-navegacion.html',
-  styleUrl: './tabs-navegacion.css'
+  styleUrls: ['./tabs-navegacion.css']
 })
 export class TabsNavegacionComponent {
   @Input() tabs: Tab[] = [];

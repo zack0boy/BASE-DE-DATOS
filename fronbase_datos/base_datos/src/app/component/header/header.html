@@ -31,6 +31,18 @@
       <span class="text">Mensaje</span>
     </button>
 
+    <!-- Botón panel admin (solo admins) -->
+    <button *ngIf="isAdmin" class="btn-admin" [routerLink]="['/admin-inicio']" title="Panel administrador">
+      <span class="icon">📊</span>
+      <span class="text">Admin</span>
+    </button>
+
+    <!-- Botón gestionar asignaturas (solo admins) - toggle admin mode -->
+    <button *ngIf="isAdmin" class="btn-admin" (click)="toggleAdminMode()" title="Entrar/Salir modo gestor">
+      <span class="icon">⚙️</span>
+      <span class="text">{{ adminMode ? 'Salir' : 'Gestionar' }}</span>
+    </button>
+
     <!-- Cerrar sesión -->
     <a href="#" (click)="onLogout($event)">
       <button class="btn-logout">

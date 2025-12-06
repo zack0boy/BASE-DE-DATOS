@@ -6,10 +6,11 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './seccion-presentacion.html',
-  styleUrl: './seccion-presentacion.css'
+  styleUrls: ['./seccion-presentacion.css']
 })
 export class SeccionPresentacionComponent {
   @Input() titulo: string = '';
   @Input() descripcion: string = '';
   @Input() imagenBg: string = '';
+  @Input() bgColor: string | null = null;
 }

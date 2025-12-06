@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './header-asignatura.html',
-  styleUrl: './header-asignatura.css'
+  styleUrls: ['./header-asignatura.css']
 })
 export class HeaderAsignaturaComponent {
   @Input() nombre: string = '';

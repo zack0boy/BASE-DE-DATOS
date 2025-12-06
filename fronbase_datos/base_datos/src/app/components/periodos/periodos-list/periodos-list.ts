@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-periodos-list',
   imports: [],
   templateUrl: './periodos-list.html',
-  styleUrl: './periodos-list.css',
+  styleUrls: ['./periodos-list.css'],
 })
 export class PeriodosList {
 

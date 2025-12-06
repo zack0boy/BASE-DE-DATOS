@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './seccion-recursos.html',
-  styleUrl: './seccion-recursos.css'
+  styleUrls: ['./seccion-recursos.css']
 })
 export class SeccionRecursosComponent {
   @Input() recursos: any[] = [];

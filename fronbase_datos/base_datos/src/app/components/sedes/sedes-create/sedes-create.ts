@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-sedes-create',
   imports: [],
   templateUrl: './sedes-create.html',
-  styleUrl: './sedes-create.css',
+  styleUrls: ['./sedes-create.css'],
 })
 export class SedesCreate {
 

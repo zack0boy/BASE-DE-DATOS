@@ -7,14 +7,8 @@
       Bienvenido a tu panel de estudiante. Aquí puedes ver y gestionar todos tus cursos.
     </p>
 
-    <!-- Loading spinner -->
-    <div *ngIf="isLoading" class="loading-spinner">
-      <p>Cargando tus asignaturas...</p>
-    </div>
-
-    <!-- Course Cards Component -->
+    <!-- Course Cards Component - siempre renderizado, maneja su propio loading -->
     <app-course-cards
-      *ngIf="!isLoading"
       [userCareer]="userCareer"
       [userClass]="userClass"
       [isAdmin]="isAdmin"

@@ -17,7 +17,7 @@ import { of } from 'rxjs';
   standalone: true,
   imports: [CommonModule, Header, Footer, CourseCards],
   templateUrl: './docente-inicio.html',
-  styleUrl: './docente-inicio.css',
+  styleUrls: ['./docente-inicio.css'],
 })
 export class DocenteInicio implements OnInit, OnDestroy {
   docenteName: string = '';
@@ -47,11 +47,14 @@ export class DocenteInicio implements OnInit, OnDestroy {
       return;
     }
 
-    // Verificar que sea docente (role_id = 42) o admin (role_id = 1)
-    const userRole = currentUser.role || null;
-    this.isDocente = userRole === 42;
-    this.isAdmin = userRole === 1;
+    // Verificar el rol del usuario (41=ESTUDIANTE, 42=DOCENTE, 45=ADMIN, 43=SECRETARIA, 44=DIRECTOR)
+    const userRole = Number(currentUser.role || currentUser.id_rol || null);
+    this.isDocente = userRole === 42; // DOCENTE
+    this.isAdmin = userRole === 45 || userRole === 43 || userRole === 44; // ADMIN, SECRETARIA, DIRECTOR
 
+    console.log('DocenteInicio - Usuario rol:', userRole, 'isDocente:', this.isDocente, 'isAdmin:', this.isAdmin);
+
+    // Si es estudiante (sin rol válido), redirigir a estudiantes-inicio
     if (!this.isDocente && !this.isAdmin) {
       // Si no es docente ni admin, redirigir a estudiantes-inicio
       this.router.navigate(['/estudiantes-inicio']);
@@ -68,7 +71,27 @@ export class DocenteInicio implements OnInit, OnDestroy {
 
   loadAsignaturas() {
     this.isLoading = true;
-    // Obtener asignaciones del docente
+
+    // Si es admin, mostrar TODAS las asignaturas
+    if (this.isAdmin) {
+      this.subscription.add(
+        this.asignaturasService.getAll().subscribe({
+          next: (asignaturasData: any[]) => {
+            console.log('Todas las asignaturas (admin):', asignaturasData);
+            this.asignaturas = asignaturasData || [];
+            this.isLoading = false;
+          },
+          error: (error) => {
+            console.error('Error cargando asignaturas:', error);
+            this.asignaturas = [];
+            this.isLoading = false;
+          }
+        })
+      );
+      return;
+    }
+
+    // Si es docente, obtener solo sus asignaturas asignadas
     this.subscription.add(
       this.asignacionesService.getByDocente(parseInt(this.docenteId)).subscribe({
         next: (data: any) => {
@@ -81,57 +104,50 @@ export class DocenteInicio implements OnInit, OnDestroy {
             return;
           }
 
-          // Obtener IDs únicos de secciones
-          const seccionIds = [...new Set(asignaciones.map((a: any) => a.idSeccion))];
-          console.log('Secciones asignadas:', seccionIds);
+          // Obtener IDs únicos de asignaturas desde asignaciones (si las traen directamente)
+          const asignaturaIds = [...new Set(
+            asignaciones
+              .filter((a: any) => a.idAsignatura || a.id_asignatura)
+              .map((a: any) => a.idAsignatura || a.id_asignatura)
+          )];
 
-          // Obtener datos de secciones
-          const seccionRequests = seccionIds.map((seccionId: any) =>
-            this.seccionesService.get(seccionId).pipe(
-              catchError(() => of(null))
-            )
-          );
-
-          this.subscription.add(
-            forkJoin(seccionRequests).subscribe({
-              next: (secciones: any[]) => {
-                console.log('Datos de secciones:', secciones);
-
-                // Obtener IDs únicos de asignaturas
-                const asignaturaIds = [...new Set(
-                  secciones
-                    .filter(s => s !== null)
-                    .map((s: any) => s.idAsignatura)
-                )];
-                console.log('Asignaturas ID:', asignaturaIds);
-
-                // Obtener datos de asignaturas
-                const asignaturaRequests = asignaturaIds.map((asignaturaId: any) =>
-                  this.asignaturasService.get(asignaturaId).pipe(
-                    catchError(() => of(null))
-                  )
-                );
-
-                this.subscription.add(
-                  forkJoin(asignaturaRequests).subscribe({
-                    next: (asignaturasData: any[]) => {
-                      console.log('Datos de asignaturas:', asignaturasData);
-                      this.asignaturas = asignaturasData.filter(a => a !== null);
-                      this.isLoading = false;
-                    },
-                    error: (error) => {
-                      console.error('Error cargando asignaturas:', error);
-                      this.isLoading = false;
-                    }
-                  })
-                );
-              },
-              error: (error) => {
-                console.error('Error cargando secciones:', error);
-                this.isLoading = false;
-              }
-            })
-          );
+          if (asignaturaIds.length > 0) {
+            console.log('Asignaturas ID (desde asignaciones):', asignaturaIds);
+            // Obtener TODAS las asignaturas y filtrar localmente
+            this.subscription.add(
+              this.asignaturasService.getAll().subscribe({
+                next: (todasLasAsignaturas: any[]) => {
+                  console.log('Todas las asignaturas disponibles:', todasLasAsignaturas);
+                  // Filtrar solo las asignaturas asignadas al docente
+                  const asignaturasDelDocente = todasLasAsignaturas.filter((a: any) =>
+                    asignaturaIds.includes(a.idAsignatura || a.id_asignatura)
+                  );
+                  console.log('Datos de asignaturas (filtradas):', asignaturasDelDocente);
+                  this.asignaturas = asignaturasDelDocente;
+                  this.isLoading = false;
+                },
+                error: (error) => {
+                  console.error('Error cargando asignaturas:', error);
+                  this.isLoading = false;
+                }
+              })
+            );
+          } else {
+            // Fallback: obtener todas las asignaturas si no vienen IDs
+            this.subscription.add(
+              this.asignaturasService.getAll().subscribe({
+                next: (asignaturasData: any[]) => {
+                  console.log('Todas las asignaturas (fallback):', asignaturasData);
+                  this.asignaturas = asignaturasData || [];
+                  this.isLoading = false;
+                },
+                error: (error) => {
+                  console.error('Error cargando asignaturas:', error);
+                  this.isLoading = false;
+                }
+              })
+            );
+          }
         },
         error: (error) => {
           console.error('Error cargando asignaciones:', error);

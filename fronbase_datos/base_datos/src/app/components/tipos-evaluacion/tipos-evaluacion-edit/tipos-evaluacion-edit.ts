@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-tipos-evaluacion-edit',
   imports: [],
   templateUrl: './tipos-evaluacion-edit.html',
-  styleUrl: './tipos-evaluacion-edit.css',
+  styleUrls: ['./tipos-evaluacion-edit.css'],
 })
 export class TiposEvaluacionEdit {
 

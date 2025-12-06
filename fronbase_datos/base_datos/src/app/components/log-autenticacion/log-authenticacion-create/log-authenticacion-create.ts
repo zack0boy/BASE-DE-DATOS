@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-log-authenticacion-create',
   imports: [],
   templateUrl: './log-authenticacion-create.html',
-  styleUrl: './log-authenticacion-create.css',
+  styleUrls: ['./log-authenticacion-create.css'],
 })
 export class LogAuthenticacionCreate {
 

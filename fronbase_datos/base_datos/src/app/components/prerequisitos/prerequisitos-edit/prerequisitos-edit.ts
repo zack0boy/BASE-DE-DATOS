@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-prerequisitos-edit',
   imports: [],
   templateUrl: './prerequisitos-edit.html',
-  styleUrl: './prerequisitos-edit.css',
+  styleUrls: ['./prerequisitos-edit.css'],
 })
 export class PrerequisitosEdit {
 

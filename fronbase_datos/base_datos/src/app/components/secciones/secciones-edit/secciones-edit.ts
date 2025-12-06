@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-secciones-edit',
   imports: [],
   templateUrl: './secciones-edit.html',
-  styleUrl: './secciones-edit.css',
+  styleUrls: ['./secciones-edit.css'],
 })
 export class SeccionesEdit {
 

@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-rol-permisos-create',
   imports: [],
   templateUrl: './rol-permisos-create.html',
-  styleUrl: './rol-permisos-create.css',
+  styleUrls: ['./rol-permisos-create.css'],
 })
 export class RolPermisosCreate {
 

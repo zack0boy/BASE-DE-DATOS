@@ -119,9 +119,14 @@
                 }">
             {{ course.progreso >= 100 ? 'Completado' : (course.progreso > 0 ? 'En progreso' : 'Pendiente') }}
           </span>
-          <button class="btn btn-sm btn-outline-primary" (click)="router.navigate(['/estudiantes-contenido', course.id])">
-            Ingresar <i class="bi bi-arrow-right ms-1"></i>
-          </button>
+          <div class="btn-group gap-2">
+            <button *ngIf="isAdmin" class="btn btn-sm btn-outline-warning" (click)="selectCourse(course)" title="Gestionar docentes y estudiantes">
+              Gestionar <i class="bi bi-gear ms-1"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-primary" (click)="selectCourseAndNavigate(course)">
+              Ingresar <i class="bi bi-arrow-right ms-1"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -153,7 +158,12 @@
             <div class="progress mb-2" style="height:6px;">
               <div class="progress-bar" [ngClass]="getEstadoBadgeClass(course.progreso)" [style.width.%]="course.progreso" role="progressbar"></div>
             </div>
-            <button class="btn btn-sm btn-outline-primary" (click)="router.navigate(['/estudiantes-contenido', course.id])">Ingresar</button>
+            <div class="btn-group btn-group-sm gap-2">
+              <button *ngIf="isAdmin" class="btn btn-outline-warning" (click)="selectCourse(course)" title="Gestionar docentes y estudiantes">
+                Gestionar
+              </button>
+              <button class="btn btn-outline-primary" (click)="selectCourseAndNavigate(course)">Ingresar</button>
+            </div>
           </div>
         </div>
       </div>

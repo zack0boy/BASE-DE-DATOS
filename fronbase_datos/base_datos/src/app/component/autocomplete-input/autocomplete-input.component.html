@@ -1,0 +1,19 @@
+<div class="autocomplete-wrapper">
+      <input
+        class="form-control form-control-sm"
+        [(ngModel)]="inputValue"
+        (input)="onInput()"
+        (keydown)="onKeyDown($event)"
+        (blur)="onBlur()"
+        [placeholder]="placeholder"
+      />
+      <div class="autocomplete-dropdown" *ngIf="showDropdown && filteredOptions.length > 0">
+        <div
+          class="autocomplete-item"
+          *ngFor="let opt of filteredOptions; let i = index"
+          [class.active]="i === selectedIndex"
+          (click)="selectOption(opt)">
+          {{ opt }}
+        </div>
+      </div>
+    </div>

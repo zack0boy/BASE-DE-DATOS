@@ -17,7 +17,7 @@ import { of } from 'rxjs';
   standalone: true,
   imports: [CommonModule, Header, Footer, CourseCards],
   templateUrl: './estudiantes-inicio.html',
-  styleUrl: './estudiantes-inicio.css',
+  styleUrls: ['./estudiantes-inicio.css'],
 })
 export class EstudiantesInicio implements OnInit, OnDestroy {
   userCareer: string = 'INGENIERÍA CIVIL INFORMÁTICA (SAN MIGUEL)';
@@ -46,13 +46,21 @@ export class EstudiantesInicio implements OnInit, OnDestroy {
       return;
     }
 
-    // Verificar el rol del usuario
-    const userRole = currentUser.role || null;
-    const isDocente = userRole === 42;
-    const isAdmin = userRole === 1;
+    // Verificar el rol del usuario (41=ESTUDIANTE, 42=DOCENTE, 45=ADMIN, 43=SECRETARIA, 44=DIRECTOR)
+    const userRole = Number(currentUser.role || currentUser.id_rol || null);
+    const isAdmin = userRole === 45 || userRole === 43 || userRole === 44; // ADMIN, SECRETARIA, DIRECTOR
+    const isDocente = userRole === 42; // DOCENTE
 
-    // Si es docente o admin, redirigir a docente-inicio
-    if (isDocente || isAdmin) {
+    console.log('EstudiantesInicio - Usuario rol:', userRole, 'isAdmin:', isAdmin, 'isDocente:', isDocente);
+
+    // Si es admin, secretaria o director -> redirigir a admin-inicio
+    if (isAdmin) {
+      this.router.navigate(['/admin-inicio']);
+      return;
+    }
+
+    // Si es docente -> redirigir a docente-inicio
+    if (isDocente) {
       this.router.navigate(['/docente-inicio']);
       return;
     }
@@ -74,6 +82,9 @@ export class EstudiantesInicio implements OnInit, OnDestroy {
         next: (data: any) => {
           const inscripciones = data as any[];
           console.log('Inscripciones del alumno:', inscripciones);
+          if (inscripciones.length > 0) {
+            console.log('Primera inscripción (para ver estructura):', inscripciones[0]);
+          }
 
           if (!inscripciones || inscripciones.length === 0) {
             this.asignaturas = [];
@@ -81,57 +92,112 @@ export class EstudiantesInicio implements OnInit, OnDestroy {
             return;
           }
 
-          // Obtener IDs únicos de secciones
-          const seccionIds = [...new Set(inscripciones.map((i: any) => i.idSeccion))];
-          console.log('Secciones inscritas:', seccionIds);
+          // Obtener IDs únicos de asignaturas desde inscripciones (algunos backends devuelven id_asignatura directamente)
+          const asignaturaIds = [...new Set(
+            inscripciones
+              .filter((i: any) => i.idAsignatura || i.id_asignatura || i.idSeccion)
+              .map((i: any) => i.idAsignatura || i.id_asignatura || i.idSeccion)
+          )];
 
-          // Obtener datos de secciones
-          const seccionRequests = seccionIds.map((seccionId: any) =>
-            this.seccionesService.get(seccionId).pipe(
-              catchError(() => of(null))
-            )
-          );
+          if (asignaturaIds.length > 0 && (inscripciones[0].idAsignatura || inscripciones[0].id_asignatura)) {
+            // Si las inscripciones traen idAsignatura/id_asignatura directamente
+            console.log('Asignaturas ID (desde inscripciones):', asignaturaIds);
+            // Obtener TODAS las asignaturas y filtrar localmente
+            this.subscription.add(
+              this.asignaturasService.getAll().subscribe({
+                next: (todasLasAsignaturas: any[]) => {
+                  console.log('Todas las asignaturas disponibles:', todasLasAsignaturas);
+                  // Filtrar solo las asignaturas que el estudiante necesita
+                  const asignaturasDelEstudiante = todasLasAsignaturas.filter((a: any) =>
+                    asignaturaIds.includes(a.idAsignatura || a.id_asignatura)
+                  );
+                  console.log('Datos de asignaturas (filtradas):', asignaturasDelEstudiante);
+                  this.asignaturas = asignaturasDelEstudiante;
+                  this.isLoading = false;
+                },
+                error: (error) => {
+                  console.error('Error cargando asignaturas:', error);
+                  this.isLoading = false;
+                }
+              })
+            );
+          } else if (inscripciones[0].idSeccion) {
+            // Si traen idSeccion, obtener todas las secciones y mapear a asignaturas
+            console.log('Secciones desde inscripciones:', asignaturaIds);
+            this.subscription.add(
+              this.seccionesService.getAll().subscribe({
+                next: (todasLasSecciones: any[]) => {
+                  console.log('Todas las secciones:', todasLasSecciones);
+                  // Filtrar secciones que el estudiante está inscrito
+                  const seccionesDelEstudiante = todasLasSecciones.filter((s: any) =>
+                    asignaturaIds.includes(s.idSeccion || s.id_seccion)
+                  );
+                  // Obtener IDs de asignaturas únicos
+                  const asigIds = [...new Set(
+                    seccionesDelEstudiante.map((s: any) => s.idAsignatura || s.id_asignatura)
+                  )];
+                  console.log('Asignaturas ID (desde secciones):', asigIds);
 
-          this.subscription.add(
-            forkJoin(seccionRequests).subscribe({
-              next: (secciones: any[]) => {
-                console.log('Datos de secciones:', secciones);
-
-                // Obtener IDs únicos de asignaturas
-                const asignaturaIds = [...new Set(
-                  secciones
-                    .filter(s => s !== null)
-                    .map((s: any) => s.idAsignatura)
-                )];
-                console.log('Asignaturas ID:', asignaturaIds);
-
-                // Obtener datos de asignaturas
-                const asignaturaRequests = asignaturaIds.map((asignaturaId: any) =>
-                  this.asignaturasService.get(asignaturaId).pipe(
-                    catchError(() => of(null))
-                  )
-                );
-
-                this.subscription.add(
-                  forkJoin(asignaturaRequests).subscribe({
-                    next: (asignaturasData: any[]) => {
-                      console.log('Datos de asignaturas:', asignaturasData);
-                      this.asignaturas = asignaturasData.filter(a => a !== null);
-                      this.isLoading = false;
-                    },
-                    error: (error) => {
-                      console.error('Error cargando asignaturas:', error);
-                      this.isLoading = false;
-                    }
-                  })
-                );
-              },
-              error: (error) => {
-                console.error('Error cargando secciones:', error);
-                this.isLoading = false;
-              }
-            })
-          );
+                  if (asigIds.length > 0) {
+                    // Obtener TODAS las asignaturas y filtrar localmente
+                    this.subscription.add(
+                      this.asignaturasService.getAll().subscribe({
+                        next: (todasLasAsignaturas: any[]) => {
+                          console.log('Todas las asignaturas disponibles:', todasLasAsignaturas);
+                          // Filtrar solo las asignaturas que el estudiante necesita
+                          const asignaturasDelEstudiante = todasLasAsignaturas.filter((a: any) =>
+                            asigIds.includes(a.idAsignatura || a.id_asignatura)
+                          );
+                          console.log('Datos de asignaturas (filtradas):', asignaturasDelEstudiante);
+                          this.asignaturas = asignaturasDelEstudiante;
+                          this.isLoading = false;
+                        },
+                        error: (error) => {
+                          console.error('Error cargando todas las asignaturas:', error);
+                          this.isLoading = false;
+                        }
+                      })
+                    );
+                  } else {
+                    this.asignaturas = [];
+                    this.isLoading = false;
+                  }
+                },
+                error: (error) => {
+                  console.error('Error cargando secciones:', error);
+                  // Fallback: obtener todas las asignaturas
+                  this.subscription.add(
+                    this.asignaturasService.getAll().subscribe({
+                      next: (asignaturasData: any[]) => {
+                        console.log('Todas las asignaturas (fallback):', asignaturasData);
+                        this.asignaturas = asignaturasData || [];
+                        this.isLoading = false;
+                      },
+                      error: (error2) => {
+                        console.error('Error cargando asignaturas:', error2);
+                        this.isLoading = false;
+                      }
+                    })
+                  );
+                }
+              })
+            );
+          } else {
+            // Si no vienen IDs de asignatura ni sección, obtener todas las asignaturas disponibles
+            this.subscription.add(
+              this.asignaturasService.getAll().subscribe({
+                next: (asignaturasData: any[]) => {
+                  console.log('Todas las asignaturas:', asignaturasData);
+                  this.asignaturas = asignaturasData || [];
+                  this.isLoading = false;
+                },
+                error: (error) => {
+                  console.error('Error cargando asignaturas:', error);
+                  this.isLoading = false;
+                }
+              })
+            );
+          }
         },
         error: (error) => {
           console.error('Error cargando inscripciones:', error);

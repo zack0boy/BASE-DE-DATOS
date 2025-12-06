@@ -1,0 +1,90 @@
+<div class="admin-secciones">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-gradient-primary text-white border-0">
+          <h5 class="mb-0"><i class="bi bi-layers"></i> Gestionar Secciones</h5>
+        </div>
+        <div class="card-body">
+          <!-- Filtros y Acciones -->
+          <div class="filter-section mb-4 p-3 bg-light rounded-3">
+            <div class="row g-3 align-items-center">
+              <div class="col-md-auto">
+                <label class="form-label fw-600 text-secondary small mb-2 d-block"><i class="bi bi-funnel"></i> Filtro</label>
+                <select class="form-select form-select-modern" [(ngModel)]="selectedAsignaturaId">
+                  <option value="">Todas</option>
+                  <option *ngFor="let a of asignaturas" [value]="a.id">{{ a.nombre }}</option>
+                </select>
+              </div>
+              <div class="col-md-auto">
+                <button class="btn btn-outline-secondary btn-modern btn-sm" (click)="selectedAsignaturaId = ''">
+                  <i class="bi bi-arrow-clockwise"></i> Limpiar
+                </button>
+              </div>
+              <div class="col-md-auto ms-auto">
+                <button class="btn btn-primary btn-modern btn-md" (click)="onCreateSection()">
+                  <i class="bi bi-plus-circle"></i> Nueva Sección
+                </button>
+              </div>
+              <div class="col-12 mt-2 small text-muted">
+                <strong>{{ getFilteredSections().length }}</strong> sección(es)
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabla -->
+          <div class="table-wrapper">
+            <div *ngIf="getFilteredSections().length === 0" class="empty-state text-center py-5">
+              <i class="bi bi-inbox"></i>
+              <p class="mt-3 text-muted">No hay secciones para mostrar</p>
+            </div>
+            <div class="table-responsive" *ngIf="getFilteredSections().length > 0">
+              <table class="table table-modern table-hover mb-0">
+                <thead>
+                  <tr>
+                    <th style="width: 35%"><i class="bi bi-book"></i> Asignatura</th>
+                    <th style="width: 25%"><i class="bi bi-layers"></i> Sección</th>
+                    <th style="width: 25%"><i class="bi bi-mortarboard"></i> Carrera</th>
+                    <th style="width: 15%">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let section of pagedSections(getFilteredSections())" class="table-row-modern">
+                    <td class="fw-600 text-primary">{{ getAsignaturaName(section.asignatura_id) }}</td>
+                    <td><span class="badge bg-info text-white">{{ section.nombre }}</span></td>
+                    <td>
+                      <small class="text-muted">{{ getCarreraForSection(section) }}</small>
+                    </td>
+                    <td>
+                      <div class="btn-group btn-group-sm" role="group">
+                        <button class="btn btn-outline-primary" (click)="editSectionHandler(section)" title="Editar">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-outline-danger" (click)="deleteSectionHandler(section)" title="Eliminar">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- Paginación -->
+            <div class="table-paginator mt-3">
+              <div class="small text-muted">Página {{ page }} de {{ totalPages(getFilteredSections()) }}</div>
+              <div class="btn-group btn-group-sm" role="group">
+                <button class="btn btn-outline-secondary" (click)="setPage(page-1, getFilteredSections())" [disabled]="page <= 1">
+                  <i class="bi bi-chevron-left"></i>
+                </button>
+                <button class="btn btn-outline-secondary" (click)="setPage(page+1, getFilteredSections())" [disabled]="page >= totalPages(getFilteredSections())">
+                  <i class="bi bi-chevron-right"></i>
+                </button>
+              </div>
+              <select class="form-select form-select-sm paginator-size" [(ngModel)]="pageSize" (change)="setPage(1, getFilteredSections())">
+                <option [value]="5">5</option>
+                <option [value]="10">10</option>
+                <option [value]="25">25</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

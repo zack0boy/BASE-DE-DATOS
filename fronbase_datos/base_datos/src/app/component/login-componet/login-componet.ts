@@ -61,7 +61,17 @@ export class LoginComponet implements OnInit {
         console.error('Login error:', error);
         const errorMessage = error.error?.message || error.message || 'Error desconocido';
         console.error('Error details:', errorMessage);
-        this.error = error.error?.message || 'Error en el inicio de sesión. Verifica tus credenciales.';
+        console.error('Error status:', error.status);
+        console.error('Error URL:', error.url);
+
+        // Mejor mensaje de error
+        if (error.status === 404) {
+          this.error = 'Error en el servidor - Endpoint de login no encontrado (404). Verifica la configuración.';
+        } else if (error.status === 401 || error.status === 400) {
+          this.error = 'Credenciales inválidas. Verifica tu RUT y contraseña.';
+        } else {
+          this.error = error.error?.message || 'Error en el inicio de sesión.';
+        }
         this.isLoading = false;
       },
       complete: () => {
@@ -72,15 +82,11 @@ export class LoginComponet implements OnInit {
   }
 
   private redirectByRole() {
-    const currentUser = this.authService.getCurrentUser();
-    const userRole = currentUser?.role || null;
-    const isDocente = userRole === 42;
-    const isAdmin = userRole === 1;
-
-    if (isDocente || isAdmin) {
-      return this.router.navigate(['/docente-inicio']);
-    } else {
-      return this.router.navigate(['/estudiantes-inicio']);
-    }
+    // Redirigir a la raíz para que RoleRedirect distribuya según el rol
+    // RoleRedirect (en la raíz) manejará la distribución correcta según:
+    // 45=ADMIN, 43=SECRETARIA, 44=DIRECTOR -> admin-inicio
+    // 42=DOCENTE -> docente-inicio
+    // 41=ESTUDIANTE -> estudiantes-inicio
+    return this.router.navigate(['/']);
   }
 }

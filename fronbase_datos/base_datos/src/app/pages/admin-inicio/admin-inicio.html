@@ -1,0 +1,12 @@
+<app-header></app-header>
+
+<main class="container-ancho py-4">
+  <div class="mb-4">
+    <h2>Panel de Administrador - Todas las Asignaturas</h2>
+    <p class="text-muted">Vista que muestra todas las asignaturas sin filtrar por inscripciones.</p>
+  </div>
+
+  <app-course-cards [isAdmin]="true" [preloadedAsignaturas]="asignaturas" [isLoadingAsignaturas]="isLoading" (asignaturaSelected)="navigateToManage($event)"></app-course-cards>
+</main>
+
+<app-footer></app-footer>

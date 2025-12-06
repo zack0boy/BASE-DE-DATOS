@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-usuarios-edit',
   imports: [],
   templateUrl: './usuarios-edit.html',
-  styleUrl: './usuarios-edit.css',
+  styleUrls: ['./usuarios-edit.css'],
 })
 export class UsuariosEdit {
 

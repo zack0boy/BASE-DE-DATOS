@@ -1,0 +1,139 @@
+<div class="admin-carreras">
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-gradient-primary text-white border-0">
+      <h5 class="mb-0"><i class="bi bi-mortarboard"></i> Carreras Existentes</h5>
+    </div>
+    <div class="card-body">
+      <!-- Acciones -->
+      <div class="filter-section mb-4 p-3 bg-light rounded-3">
+        <div class="d-flex gap-2 align-items-center">
+          <button class="btn btn-primary btn-modern btn-md" (click)="openCreateModal()">
+            <i class="bi bi-plus-circle"></i> Nueva Carrera
+          </button>
+          <span class="small text-muted ms-auto"><strong>{{ (carreras || []).length }}</strong> carrera(s)</span>
+        </div>
+      </div>
+      <div *ngIf="!carreras || carreras.length === 0" class="empty-state text-center py-5">
+        <i class="bi bi-inbox"></i>
+        <p class="mt-3 text-muted">No hay carreras registradas</p>
+      <div class="table-responsive" *ngIf="carreras && carreras.length > 0">
+        <table class="table table-modern table-hover mb-0">
+          <thead>
+            <tr>
+              <th style="width: 30%"><i class="bi bi-book"></i> Nombre</th>
+              <th style="width: 15%"><i class="bi bi-tag"></i> Código</th>
+              <th style="width: 20%"><i class="bi bi-hourglass-split"></i> Duración</th>
+              <th style="width: 35%"><i class="bi bi-file-text"></i> Descripción</th>
+              <th style="width: 10%">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let c of pagedCarreras(carreras || [])">
+              <tr class="table-row-modern">
+                <td class="fw-600 text-primary">{{ c.nombre }}</td>
+                <td><span class="badge bg-primary">{{ c.codigo || c.numero || c.id }}</span></td>
+                <td><span class="badge bg-info text-white">{{ c.duracion }} sem.</span></td>
+                <td>
+                  <small class="text-muted text-truncate d-block">{{ c.descripcion || 'Sin descripción' }}</small>
+                </td>
+                <td>
+                  <div class="btn-group btn-group-sm" role="group">
+                    <button class="btn btn-outline-secondary" (click)="toggleDetails(c)" title="Ver detalles">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-outline-primary" (click)="onEditCarrera(c)" title="Editar">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-outline-danger" (click)="onDeleteCarrera(c)" title="Eliminar">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+
+              <tr *ngIf="expandedCarreraId === (c.id || c.idCarrera || c.id_carrera)" class="details-row">
+                <td colspan="5" class="p-3 bg-light">
+                  <div class="mb-2"><strong>Asignaturas y Secciones</strong></div>
+                  <div *ngIf="getAsignaturasForCarrera(c).length === 0" class="small text-muted">No hay asignaturas asociadas</div>
+                  <div *ngIf="getAsignaturasForCarrera(c).length > 0">
+                    <ul class="list-unstyled mb-0">
+                      <li *ngFor="let a of getAsignaturasForCarrera(c)" class="mb-2">
+                        <div class="fw-600">{{ a.nombre }}</div>
+                        <div class="small text-muted">Secciones:
+                          <ng-container *ngIf="getSeccionesForAsignatura(a).length; else noSec">
+                            <span *ngFor="let s of getSeccionesForAsignatura(a)" class="badge bg-secondary me-1">{{ s.nombre }}</span>
+                          </ng-container>
+                          <ng-template #noSec><span class="text-muted">(sin secciones)</span></ng-template>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <!-- Paginación -->
+      <div class="table-paginator mt-3">
+        <div class="small text-muted">Página {{ page }} de {{ totalPages(carreras || []) }}</div>
+        <div class="btn-group btn-group-sm" role="group">
+          <button class="btn btn-outline-secondary" (click)="setPage(page-1, carreras || [])" [disabled]="page <= 1">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          <button class="btn btn-outline-secondary" (click)="setPage(page+1, carreras || [])" [disabled]="page >= totalPages(carreras || [])">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+        <select class="form-select form-select-sm paginator-size" [(ngModel)]="pageSize" (change)="setPage(1, carreras || [])">
+          <option [value]="5">5</option>
+          <option [value]="10">10</option>
+          <option [value]="25">25</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Crear Carrera -->
+  <div *ngIf="showCreateModal" class="modal-overlay" (click)="closeCreateModal()">
+    <div class="modal-content-modern" (click)="$event.stopPropagation()">
+      <div class="modal-header bg-gradient-success text-white border-0">
+        <h5 class="modal-title"><i class="bi bi-plus-circle"></i> Crear Nueva Carrera</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="closeCreateModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label fw-600">Nombre de la Carrera</label>
+          <input type="text" class="form-control form-control-modern" [(ngModel)]="newCarrera.nombre" placeholder="Ej: Ingeniería en Sistemas">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-600">Código</label>
+          <div class="input-group">
+            <input type="text" class="form-control form-control-modern" [(ngModel)]="newCarrera.codigo" placeholder="Auto-generado" readonly>
+            <button class="btn btn-outline-secondary btn-modern" type="button" (click)="generateCarreraCode()">
+              <i class="bi bi-arrow-repeat"></i> Generar
+            </button>
+          </div>
+          <small class="text-muted d-block mt-1">El código se genera automáticamente</small>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-600">Descripción</label>
+          <textarea class="form-control form-control-modern" [(ngModel)]="newCarrera.descripcion" rows="3" placeholder="Descripción de la carrera"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-600">Duración (semestres)</label>
+          <input type="number" class="form-control form-control-modern" [(ngModel)]="newCarrera.duracion" placeholder="8" min="1" max="16">
+        </div>
+      </div>
+      <div class="modal-footer bg-light border-top">
+        <button type="button" class="btn btn-outline-secondary btn-modern" (click)="closeCreateModal()">Cancelar</button>
+        <button type="button" class="btn btn-success btn-modern btn-lg" (click)="onCreateCarrera()">
+          <i class="bi bi-check-circle"></i> Crear Carrera
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Overlay Backdrop -->
+  <div *ngIf="showCreateModal" class="modal-backdrop"></div>
+</div>

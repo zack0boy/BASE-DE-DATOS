@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-permisos-edit',
   imports: [],
   templateUrl: './permisos-edit.html',
-  styleUrl: './permisos-edit.css',
+  styleUrls: ['./permisos-edit.css'],
 })
 export class PermisosEdit {
 

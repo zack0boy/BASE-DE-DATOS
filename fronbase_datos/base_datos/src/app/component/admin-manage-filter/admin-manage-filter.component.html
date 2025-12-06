@@ -1,0 +1,20 @@
+<div class="admin-filter card mb-3 p-3">
+      <div class="row g-2 align-items-center">
+        <div class="col-md-4">
+          <input class="form-control" placeholder="Buscar por nombre, apellido o email" [(ngModel)]="q" (input)="emitChange()" />
+        </div>
+        <div class="col-md-3">
+          <input class="form-control" placeholder="Filtrar por RUT" [(ngModel)]="rut" (input)="emitChange()" />
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" [(ngModel)]="asignaturaId" (change)="emitChange()">
+            <option value="">Todas las asignaturas</option>
+            <option *ngFor="let a of asignaturas" [value]="a.id || a.idAsignatura || a.id_asignatura">{{ a.nombre || a.titulo }}</option>
+          </select>
+        </div>
+        <div class="col-md-2 text-end">
+          <button class="btn btn-outline-secondary btn-sm me-2" (click)="clear()">Limpiar</button>
+          <button class="btn btn-primary btn-sm" (click)="apply()">Aplicar</button>
+        </div>
+      </div>
+    </div>

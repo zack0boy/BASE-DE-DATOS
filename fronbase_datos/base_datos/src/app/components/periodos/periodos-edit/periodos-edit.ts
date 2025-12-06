@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-periodos-edit',
   imports: [],
   templateUrl: './periodos-edit.html',
-  styleUrl: './periodos-edit.css',
+  styleUrls: ['./periodos-edit.css'],
 })
 export class PeriodosEdit {
 

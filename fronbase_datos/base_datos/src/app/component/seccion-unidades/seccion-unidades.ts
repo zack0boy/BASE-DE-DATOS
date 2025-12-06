@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './seccion-unidades.html',
-  styleUrl: './seccion-unidades.css'
+  styleUrls: ['./seccion-unidades.css']
 })
 export class SeccionUnidadesComponent {
   @Input() unidades: any[] = [];

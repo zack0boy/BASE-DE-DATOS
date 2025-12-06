@@ -61,7 +61,7 @@ import { ErrorMessageComponent } from '../../shared/error-message/error-message.
     ErrorMessageComponent
   ],
   templateUrl: './docente-contenido.html',
-  styleUrl: './docente-contenido.css',
+  styleUrls: ['./docente-contenido.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DocenteContenidoComponent implements OnInit, OnDestroy {

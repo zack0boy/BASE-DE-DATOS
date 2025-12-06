@@ -1,0 +1,128 @@
+    <div class="admin-users">
+
+
+      <div *ngIf="getListForRole(role) && getListForRole(role).length > 0">
+        <!-- Filtro horizontal -->
+        <div class="filter-panel-horizontal p-3 bg-light rounded mb-3">
+          <div class="d-flex gap-2 align-items-center flex-wrap">
+            <div class="d-flex align-items-center gap-2 flex-fill">
+              <label class="form-label small fw-bold mb-0">Buscar</label>
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="searchFilter" placeholder="Nombre o email">
+              <label class="form-label small fw-bold mb-0 ms-2">Asignatura</label>
+              <select class="form-select form-select-sm" [(ngModel)]="asignaturaFilter">
+                <option value="">Todas</option>
+                <option *ngFor="let a of asignaturaNames" [value]="a">{{ a }}</option>
+              </select>
+            </div>
+            <div class="ms-auto d-flex gap-2">
+              <button class="btn btn-primary btn-modern btn-md" (click)="openCreateModal()">
+                <i class="bi bi-person-plus"></i> Crear usuario
+              </button>
+              <button class="btn btn-success btn-modern btn-md" (click)="confirmChanges()">
+                <i class="bi bi-check-circle"></i> Confirmar cambios
+              </button>
+            </div>
+          </div>
+          <div class="small text-muted mt-2">
+            <strong>Mostrando:</strong> {{ filteredUsers(getListForRole(role)).length }} usuarios
+          </div>
+        </div>
+
+        <!-- Tabla de usuarios -->
+        <div class="table-responsive">
+          <table class="table table-hover table-striped align-middle">
+            <thead class="table-light sticky-top">
+              <tr>
+                <th style="width: 20%">Nombre</th>
+                <th style="width: 15%">Apellido</th>
+                <th style="width: 20%">Email</th>
+                <th style="width: 15%">RUT/Cédula</th>
+                <th style="width: 15%">Asignatura</th>
+                <th style="width: 15%">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let u of pagedUsers(filteredUsers(getListForRole(role)))">
+                <tr class="user-row">
+                  <td>
+                    <div class="fw-bold">{{ u.nombre || u.name }}</div>
+                  </td>
+                  <td>
+                    <div class="small text-muted">{{ u.apellido || u.lastName || '-' }}</div>
+                  </td>
+                  <td>{{ u.email || 'N/A' }}</td>
+                  <td>{{ u.rut || u.cedula || 'N/A' }}</td>
+                  <td>
+                    <div class="small text-truncate">
+                      <!-- Mostrar la asignatura vinculada (solo lectura). Edición desde modal de usuario. -->
+                      {{ getAsignaturaDisplay(u) }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="btn-group btn-group-sm" role="group">
+                      <button class="btn btn-outline-primary" (click)="edit.emit(u)" title="Editar">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      <button class="btn btn-outline-danger" (click)="openDeleteModal(u)" title="Eliminar">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                      <button class="btn btn-outline-info" (click)="toggleSections(u)" title="Ver secciones">
+                        <i class="bi bi-list"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <!-- Row de secciones expandible -->
+                <tr *ngIf="expandedUserSections === u.id" class="sections-row">
+                  <td colspan="6" class="p-0">
+                    <div class="sections-menu p-3 bg-light">
+                      <strong class="d-block mb-2">Secciones de {{ u.nombre || u.name }}:</strong>
+                      <div *ngIf="getSectionsForUser(u).length === 0" class="alert alert-sm alert-warning mb-0">
+                        No hay más secciones
+                      </div>
+                      <ul *ngIf="getSectionsForUser(u).length > 0" class="list-unstyled mb-0">
+                        <li *ngFor="let s of getSectionsForUser(u)" class="badge bg-secondary me-2 mb-2">
+                          {{ s.nombre }}
+                        </li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+
+          <!-- Paginación -->
+          <div class="table-paginator mt-3">
+            <div class="small text-muted">Página {{ page }} de {{ totalPages(filteredUsers(getListForRole(role))) }}</div>
+            <div class="btn-group btn-group-sm" role="group">
+              <button class="btn btn-outline-secondary" (click)="setPage(page-1, filteredUsers(getListForRole(role)))" [disabled]="page <= 1">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              <button class="btn btn-outline-secondary" (click)="setPage(page+1, filteredUsers(getListForRole(role)))" [disabled]="page >= totalPages(filteredUsers(getListForRole(role)))">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
+            <select class="form-select form-select-sm paginator-size" [(ngModel)]="pageSize" (change)="setPage(1, filteredUsers(getListForRole(role)))">
+              <option [value]="5">5</option>
+              <option [value]="10">10</option>
+              <option [value]="25">25</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <app-confirm-delete-modal
+        [isOpen]="deleteModalOpen"
+        [userName]="userToDelete ? (userToDelete.nombre || userToDelete.name) + ' ' + (userToDelete.apellido || userToDelete.lastName) : ''"
+        (confirm)="onConfirmDelete()"
+        (cancel)="deleteModalOpen = false">
+      </app-confirm-delete-modal>
+
+      <app-create-user-modal
+        [isOpen]="createModalOpen"
+        [existingEmails]="getAllEmails()"
+        (save)="onCreateUser($event)"
+        (cancel)="createModalOpen = false">
+      </app-create-user-modal>
+    </div>

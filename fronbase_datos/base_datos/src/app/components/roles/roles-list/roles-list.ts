@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-roles-list',
   imports: [],
   templateUrl: './roles-list.html',
-  styleUrl: './roles-list.css',
+  styleUrls: ['./roles-list.css'],
 })
 export class RolesList {
 

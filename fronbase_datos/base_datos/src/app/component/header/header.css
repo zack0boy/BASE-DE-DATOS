@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 24px;
+  padding: 12px 32px;
   font-weight: bold;
   width: 100%;
   position: fixed;
@@ -31,7 +31,10 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-left: auto;
 }
+
+.color-swatch { display: none; }
 
 .message-button-group {
   position: relative;
@@ -104,6 +107,11 @@
   font-weight: bold;
   border: 2px solid rgba(102, 126, 234, 1);
   animation: pulse 2s infinite;
+}
+
+.badge:empty,
+.badge[style*="display: none"] {
+  display: none !important;
 }
 
 @keyframes pulse {

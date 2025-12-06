@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-universidades-edit',
   imports: [],
   templateUrl: './universidades-edit.html',
-  styleUrl: './universidades-edit.css',
+  styleUrls: ['./universidades-edit.css'],
 })
 export class UniversidadesEdit {
 

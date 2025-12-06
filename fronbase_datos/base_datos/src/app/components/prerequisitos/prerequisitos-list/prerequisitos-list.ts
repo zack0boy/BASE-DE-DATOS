@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-prerequisitos-list',
   imports: [],
   templateUrl: './prerequisitos-list.html',
-  styleUrl: './prerequisitos-list.css',
+  styleUrls: ['./prerequisitos-list.css'],
 })
 export class PrerequisitosList {
 

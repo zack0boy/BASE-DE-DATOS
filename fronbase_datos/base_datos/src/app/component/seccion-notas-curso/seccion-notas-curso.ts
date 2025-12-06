@@ -15,7 +15,7 @@ export interface PonderacionNota {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './seccion-notas-curso.html',
-  styleUrl: './seccion-notas-curso.css'
+  styleUrls: ['./seccion-notas-curso.css']
 })
 export class SeccionNotasCursoComponent {
   ponderaciones: PonderacionNota[] = [];

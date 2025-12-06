@@ -1,0 +1,62 @@
+    <div class="admin-manage-shell">
+      <app-header-asignatura
+        [nombre]="selectedAsignatura ? (selectedAsignatura.nombre || selectedAsignatura.titulo) : 'Administración'"
+        [showBackButton]="false">
+      </app-header-asignatura>
+
+      <div class="container-ancho mt-3">
+        <app-tabs-navegacion [tabs]="tabs" [activeTabId]="activeTab" (tabSelected)="setTab($event)"></app-tabs-navegacion>
+      </div>
+
+      <div class="container-ancho mt-4">
+        <div class="tab-content">
+          <app-admin-manage-users
+            [role]="activeTab"
+            [estudiantes]="estudiantes"
+            [docentes]="docentes"
+            [secretarias]="secretarias"
+            [directores]="directores"
+            [admins]="admins"
+            [asignaturas]="asignaturas"
+            [filter]="filter"
+            (edit)="edit.emit($event)"
+            (delete)="delete.emit($event)"
+            (asignaturaChange)="asignaturaChange.emit($event)"
+            (create)="createUser.emit()">
+          </app-admin-manage-users>
+
+          <div *ngIf="activeTab === 'asignaturas'" class="mt-3">
+            <app-admin-manage-asignaturas
+              [asignaturas]="asignaturas"
+              [newAsignatura]="newAsignatura"
+              (createAsignatura)="createAsignatura.emit($event)"
+              (editAsignatura)="editAsignatura.emit($event)"
+              (deleteAsignatura)="deleteAsignatura.emit($event)"
+              (select)="selectAsignatura.emit($event)">
+            </app-admin-manage-asignaturas>
+          </div>
+
+          <div *ngIf="activeTab === 'secciones'" class="mt-3">
+            <app-admin-manage-secciones
+              [asignaturas]="asignaturas"
+              [secciones]="secciones"
+              [carreras]="carreras"
+              (createSection)="createSection.emit($event)"
+              (editSection)="editSection.emit($event)"
+              (deleteSection)="deleteSection.emit($event)">
+            </app-admin-manage-secciones>
+          </div>
+
+          <div *ngIf="activeTab === 'carreras'" class="mt-3">
+            <app-admin-manage-carreras
+              [carreras]="carreras"
+              [asignaturas]="asignaturas"
+              [secciones]="secciones"
+              (createCarrera)="createCarrera.emit($event)"
+              (editCarrera)="editCarrera.emit($event)"
+              (deleteCarrera)="deleteCarrera.emit($event)">
+            </app-admin-manage-carreras>
+          </div>
+        </div>
+      </div>
+    </div>
